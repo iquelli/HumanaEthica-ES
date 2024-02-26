@@ -42,7 +42,8 @@ public enum ErrorMessage {
     ACTIVITY_ALREADY_REPORTED("Activity is already reported with name %s"),
 
     // Enrollment
-    ENROLLMENT_MOTIVATION_TOO_SHORT("Enrollment motivation must have at least %d characters");
+    ENROLLMENT_MOTIVATION_TOO_SHORT("Enrollment motivation must have at least %d characters"),
+    ENROLLMENT_PERIOD_CLOSED("Activity enrollment period is already closed");
 
 
     public final String label;

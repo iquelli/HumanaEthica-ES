@@ -81,6 +81,7 @@ public class Enrollment {
 
     private void verifyInvariants() {
         motivationLengthAboveMinimum();
+        enrollmentBeforeDeadline();
     }
 
     private void motivationLengthAboveMinimum() {
@@ -88,5 +89,13 @@ public class Enrollment {
             throw new HEException(ENROLLMENT_MOTIVATION_TOO_SHORT, MOTIVATION_MINIMUM_LENGTH);
         }
     }
+
+    private void enrollmentBeforeDeadline() {
+        LocalDateTime applicationDeadLine = activity.getApplicationDeadline();
+        if (!this.creationDate.isBefore(applicationDeadLine)) {
+            throw new HEException(ENROLLMENT_PERIOD_CLOSED);
+        }
+    }
+
 
 }
