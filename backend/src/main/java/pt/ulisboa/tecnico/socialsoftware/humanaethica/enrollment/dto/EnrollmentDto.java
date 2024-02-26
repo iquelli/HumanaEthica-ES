@@ -9,7 +9,7 @@ public class EnrollmentDto {
 
     private Integer id;
     private String motivation;
-    private String creationDate;
+    private String enrollmentDateTime;
     private ActivityDto activity;
     private UserDto volunteer;
 
@@ -19,7 +19,7 @@ public class EnrollmentDto {
     public EnrollmentDto(Enrollment enrollment){
         setId(enrollment.getId());
         setMotivation(enrollment.getMotivation());
-        setCreationDate(DateHandler.toISOString(enrollment.getCreationDate()));
+        setEnrollmentDateTime(DateHandler.toISOString(enrollment.getEnrollmentDateTime()));
         setActivity(new ActivityDto(enrollment.getActivity(), false));
         setVolunteer(new UserDto(enrollment.getVolunteer()));
     }
@@ -40,12 +40,12 @@ public class EnrollmentDto {
         this.motivation = motivation;
     }
 
-    public String getCreationDate() {
-        return creationDate;
+    public String getEnrollmentDateTime() {
+        return this.enrollmentDateTime;
     }
 
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
+    public void setEnrollmentDateTime(String enrollmentDateTime) {
+        this.enrollmentDateTime = enrollmentDateTime;
     }
 
     public ActivityDto getActivity() {
@@ -69,7 +69,7 @@ public class EnrollmentDto {
         return "EnrollmentDto{" +
                 "id=" + id +
                 ", motivation='" + motivation + '\'' +
-                ", creationDate='" + creationDate + '\'' +
+                ", enrollmentDateTime='" + enrollmentDateTime + '\'' +
                 ", activity=" + activity +
                 ", volunteer=" + volunteer +
                 '}';

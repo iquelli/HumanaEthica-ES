@@ -28,15 +28,14 @@ public class Enrollment {
     @ManyToOne
     private Volunteer volunteer;
 
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
+    private LocalDateTime enrollmentDateTime;
 
     public Enrollment() {
     }
 
     public Enrollment(EnrollmentDto enrollmentDto, Activity activity, Volunteer volunteer) {
         setMotivation(enrollmentDto.getMotivation());
-        setCreationDate(DateHandler.now());
+        setEnrollmentDateTime(DateHandler.now());
         setActivity(activity);
         setVolunteer(volunteer);
 
@@ -71,12 +70,12 @@ public class Enrollment {
         this.volunteer = volunteer;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public LocalDateTime getEnrollmentDateTime() {
+        return enrollmentDateTime;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setEnrollmentDateTime(LocalDateTime enrollmentDateTime) {
+        this.enrollmentDateTime = enrollmentDateTime;
     }
 
     private void verifyInvariants() {
@@ -92,7 +91,7 @@ public class Enrollment {
 
     private void enrollmentBeforeDeadline() {
         LocalDateTime applicationDeadLine = activity.getApplicationDeadline();
-        if (!this.creationDate.isBefore(applicationDeadLine)) {
+        if (!this.enrollmentDateTime.isBefore(applicationDeadLine)) {
             throw new HEException(ENROLLMENT_PERIOD_CLOSED);
         }
     }
