@@ -214,6 +214,9 @@ class SpockTest extends Specification {
         activityDto
     }
 
+    //enrollment
+    public static final String ENROLLMENT_MOTIVATION_1 = "enrollment motivation 1"
+
     // clean database
 
     def deleteAll() {

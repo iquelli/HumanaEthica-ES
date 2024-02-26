@@ -33,7 +33,7 @@ public class Enrollment {
     public Enrollment() {
     }
 
-    public Enrollment(EnrollmentDto enrollmentDto, Activity activity, Volunteer volunteer) {
+    public Enrollment(Activity activity, Volunteer volunteer, EnrollmentDto enrollmentDto) {
         setMotivation(enrollmentDto.getMotivation());
         setEnrollmentDateTime(DateHandler.now());
         setActivity(activity);
