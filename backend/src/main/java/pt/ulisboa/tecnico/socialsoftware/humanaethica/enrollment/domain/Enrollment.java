@@ -3,13 +3,18 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.domain;
 import jakarta.persistence.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 
 import java.time.LocalDateTime;
 
+import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
+
 @Entity
 @Table(name = "enrollment")
 public class Enrollment {
+    
+    private static final int MOTIVATION_MINIMUM_LENGTH = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +74,13 @@ public class Enrollment {
     }
 
     private void verifyInvariants() {
-        // TODO
+        motivationLengthAboveMinimum();
     }
+
+    private void motivationLengthAboveMinimum() {
+        if (this.motivation == null || this.motivation.length() < MOTIVATION_MINIMUM_LENGTH) {
+            throw new HEException(ENROLLMENT_MOTIVATION_TOO_SHORT, MOTIVATION_MINIMUM_LENGTH);
+        }
+    }
+
 }
