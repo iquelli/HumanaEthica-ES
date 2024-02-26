@@ -83,6 +83,7 @@ public class Enrollment {
     private void verifyInvariants() {
         motivationLengthAboveMinimum();
         enrollmentBeforeDeadline();
+        hasEnrolledForActivity();
     }
 
     private void motivationLengthAboveMinimum() {
@@ -98,5 +99,12 @@ public class Enrollment {
         }
     }
 
+    private void hasEnrolledForActivity() {
+        boolean isEnrolled = volunteer.getEnrollments().stream()
+                .anyMatch(enrollment -> enrollment.getActivity().getName().equals(activity.getName()));
 
+        if (isEnrolled) {
+            throw new HEException(VOLUNTEER_ALREADY_ENROLLED, volunteer.getName(), activity.getName());
+        }
+    }
 }

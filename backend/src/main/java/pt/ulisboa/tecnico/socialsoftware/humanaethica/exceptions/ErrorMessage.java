@@ -43,7 +43,8 @@ public enum ErrorMessage {
 
     // Enrollment
     ENROLLMENT_MOTIVATION_TOO_SHORT("Enrollment motivation must have at least %d characters"),
-    ENROLLMENT_PERIOD_CLOSED("Activity enrollment period is already closed");
+    ENROLLMENT_PERIOD_CLOSED("Activity enrollment period is already closed"),
+    VOLUNTEER_ALREADY_ENROLLED("Volunteer %s already enrolled in activity %s");
 
 
     public final String label;
