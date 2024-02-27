@@ -2,15 +2,20 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.domain;
 
 import jakarta.persistence.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
 import java.time.LocalDateTime;
 
+import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
+
 @Entity
 @Table(name = "assessment")
 public class Assessment {
+
+    private static final int REVIEW_MIN_LEN = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +39,7 @@ public class Assessment {
         setInstitution(institution);
         setVolunteer(volunteer);
 
-        // verifyInvariants();
+        verifyInvariants();
     }
 
     public Integer getId() {
@@ -73,8 +78,14 @@ public class Assessment {
         this.volunteer = volunteer;
     }
 
-    // private void verifyInvariants() {
-        // TODO
-    // }
-}
+    private void verifyInvariants() {
+        reviewLengthAboveMinimumLength();
+    }
 
+    private void reviewLengthAboveMinimumLength() {
+        if (this.review == null || this.review.length() < REVIEW_MIN_LEN) {
+            throw new HEException(ASSESSMENT_REVIEW_TOO_SHORT, REVIEW_MIN_LEN);
+        }
+    }
+
+}
