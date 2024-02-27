@@ -45,7 +45,7 @@ class CreateEnrollmentMethodTest extends SpockTest {
         1 * activity.addEnrollment(_)
     }
 
-    @Unroll
+
     def "create enrollment and violate a volunteer can apply only once to an activity"() {
         given:
         activity.getApplicationDeadline() >> IN_TWO_DAYS
@@ -60,6 +60,23 @@ class CreateEnrollmentMethodTest extends SpockTest {
         then:
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.VOLUNTEER_ALREADY_ENROLLED
+    }
+
+    def "create enrollment and violate volunteer cannot apply after deadline"() {
+        given:
+        activity.getApplicationDeadline() >> ONE_DAY_AGO
+        activity.getName() >> ACTIVITY_NAME_1
+        activity.getEnrollments() >> [otherEnrollment]
+        volunteer.getEnrollments() >> [otherEnrollment]
+        otherEnrollment.getActivity() >> otherActivity
+        otherActivity.getName() >> ACTIVITY_NAME_2
+
+        when:
+        new Enrollment(activity, volunteer, enrollmentDto)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == ErrorMessage.ENROLLMENT_PERIOD_CLOSED
     }
 
     @TestConfiguration
