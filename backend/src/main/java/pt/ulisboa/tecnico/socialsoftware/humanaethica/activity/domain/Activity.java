@@ -37,7 +37,7 @@ public class Activity {
     @JoinTable(name = "activity_themes")
     private List<Theme> themes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Enrollment> enrollments = new ArrayList<>();
 
     @ManyToOne
