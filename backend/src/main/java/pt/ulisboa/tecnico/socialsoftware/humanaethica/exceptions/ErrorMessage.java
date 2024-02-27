@@ -41,11 +41,13 @@ public enum ErrorMessage {
     ACTIVITY_ALREADY_SUSPENDED("Activity is already suspended with name %s"),
     ACTIVITY_ALREADY_REPORTED("Activity is already reported with name %s"),
 
+    // Assessment
+    ASSESSMENT_REVIEW_TOO_SHORT("Assessment review must have at least %d characters"),
+
     // Enrollment
     ENROLLMENT_MOTIVATION_TOO_SHORT("Enrollment motivation must have at least %d characters"),
     ENROLLMENT_PERIOD_CLOSED("Activity enrollment period is already closed"),
     VOLUNTEER_ALREADY_ENROLLED("Volunteer %s already enrolled in activity %s");
-
 
     public final String label;
 
