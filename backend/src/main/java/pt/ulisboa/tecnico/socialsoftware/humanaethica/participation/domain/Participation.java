@@ -86,6 +86,22 @@ public class Participation {
     }
 
     private void verifyInvariants() {
-        // TODO
+        participationLimitReached();
+        participatesInActivity();
+        // TODO: 1 invariant
+    }
+
+    private void  participationLimitReached(){
+       if (activity.getParticipations().stream().count() == activity.getParticipantsNumberLimit()){
+           throw new HEException(PARTICIPATION_LIMIT_REACHED, activity.getName());
+       }
+    }
+
+    private void  participatesInActivity(){
+        boolean isParticipant = volunteer.getParticipations().stream().
+                anyMatch(participation -> participation.getActivity().getName().equals(activity.getName()));
+        if (isParticipant){
+            throw new HEException(VOLUNTEER_IS_ALREADY_A_PARTICIPANT, volunteer.getName(), activity.getName());
+        }
     }
 }

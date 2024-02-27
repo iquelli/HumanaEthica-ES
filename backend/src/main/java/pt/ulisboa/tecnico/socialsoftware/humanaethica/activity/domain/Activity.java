@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class Activity {
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "activity_themes")
     private List<Theme> themes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Participation> participations = new ArrayList<>();
 
     @ManyToOne
     private Institution institution;
@@ -222,6 +227,14 @@ public class Activity {
     public void removeTheme(Theme theme) {
         this.themes.remove(theme);
         theme.removeActivity(this);
+    }
+
+    public List<Participation> getParticipations() {
+        return participations;
+    }
+
+    public void addParticipation(Participation participation){
+        this.participations.add(participation);
     }
 
     public void setInstitution(Institution institution) {
