@@ -50,6 +50,14 @@ public enum ErrorMessage {
     ENROLLMENT_MOTIVATION_TOO_SHORT("Enrollment motivation must have at least %d characters"),
     ENROLLMENT_PERIOD_CLOSED("Activity enrollment period is already closed"),
     VOLUNTEER_ALREADY_ENROLLED("Volunteer %s already enrolled in activity %s");
+    ACTIVITY_ALREADY_REPORTED("Activity is already reported with name %s"),
+
+
+    //Participation
+    PARTICIPATION_LIMIT_REACHED("Activity %s has already reached its limit of participants"),
+    VOLUNTEER_IS_ALREADY_A_PARTICIPANT("Volunteer %s already participates in activity %s");
+
+    //TODO: ONE ERR MSG
 
     public final String label;
 
