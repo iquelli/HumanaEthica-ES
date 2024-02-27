@@ -51,7 +51,7 @@ public class Enrollment {
     }
 
     public void setMotivation(String motivation) {
-        this.motivation = motivation.trim();
+        this.motivation = motivation;
     }
 
     public Activity getActivity() {
@@ -81,13 +81,20 @@ public class Enrollment {
     }
 
     private void verifyInvariants() {
+        motivationIsRequired();
         motivationLengthAboveMinimum();
         enrollmentBeforeDeadline();
         hasEnrolledForActivity();
     }
 
+    private void motivationIsRequired() {
+        if (this.motivation == null || this.motivation.trim().isEmpty()) {
+            throw new HEException(ENROLLMENT_MOTIVATION_TOO_SHORT, MOTIVATION_MINIMUM_LENGTH);
+        }
+    }
+
     private void motivationLengthAboveMinimum() {
-        if (this.motivation == null || this.motivation.length() < MOTIVATION_MINIMUM_LENGTH) {
+        if (this.motivation.length() < MOTIVATION_MINIMUM_LENGTH) {
             throw new HEException(ENROLLMENT_MOTIVATION_TOO_SHORT, MOTIVATION_MINIMUM_LENGTH);
         }
     }
