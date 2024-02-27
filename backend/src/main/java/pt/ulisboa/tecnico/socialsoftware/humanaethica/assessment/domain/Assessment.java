@@ -1,8 +1,10 @@
 package pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.domain;
 
 import jakarta.persistence.*;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +28,14 @@ public class Assessment {
     public Assessment() {
     }
 
-    // TODO constructor
+    public Assessment(AssessmentDto assessmentDto, Institution institution, Volunteer volunteer) {
+        setReview(assessmentDto.getReview());
+        setReviewDate(DateHandler.now());
+        setInstitution(institution);
+        setVolunteer(volunteer);
+
+        // verifyInvariants();
+    }
 
     public Integer getId() {
         return id;
