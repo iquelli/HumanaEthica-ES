@@ -64,9 +64,7 @@ public class Participation {
 
     public void setActivity(Activity activity) {
         this.activity = activity;
-
-        // TODO define addParticipation in Activity.java
-        // activity.addParticipation(this);
+        activity.addParticipation(this);
     }
 
     public Activity getActivity() {
@@ -76,9 +74,7 @@ public class Participation {
 
     public void setVolunteer(Volunteer volunteer) {
         this.volunteer = volunteer;
-
-        // TODO define addParticipation in Volunteer.java
-        // volunteer.addParticipation(this);
+        volunteer.addParticipation(this);
     }
 
     public Volunteer getVolunteer() {
