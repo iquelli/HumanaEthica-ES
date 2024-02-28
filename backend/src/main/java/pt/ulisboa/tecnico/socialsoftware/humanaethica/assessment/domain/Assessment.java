@@ -83,6 +83,7 @@ public class Assessment {
     private void verifyInvariants() {
         reviewLengthAboveMinimumLength();
         institutionHasCompletedActivity();
+        volunteerHasNotAssessedInstituition();
     }
 
     private void reviewLengthAboveMinimumLength() {
@@ -97,6 +98,19 @@ public class Assessment {
                 .anyMatch(a -> a.getEndingDate().isBefore(this.reviewDate))) {
             throw new HEException(ASSESSMENT_INSTITUTION_WITHOUT_COMPLETED_ACTIVITY, this.institution.getName());
         }
+    }
+
+    private void volunteerHasNotAssessedInstituition() {
+        Boolean hasAssessedInstitution = this.volunteer.getAssessments()
+                                        .stream()
+                                        .anyMatch(a -> a.getInstitution().getName()
+                                        .equals(this.institution.getName()));
+
+        if (this.volunteer == null || hasAssessedInstitution) {
+            throw new HEException(ASSESSMENT_VOLUNTEER_HAS_ASSESSED_INSTITUTION, this.volunteer.getName(),
+                    this.institution.getName());
+        }
+
     }
 
 }
