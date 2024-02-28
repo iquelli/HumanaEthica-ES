@@ -82,11 +82,20 @@ public class Assessment {
 
     private void verifyInvariants() {
         reviewLengthAboveMinimumLength();
+        institutionHasCompletedActivity();
     }
 
     private void reviewLengthAboveMinimumLength() {
         if (this.review == null || this.review.length() < REVIEW_MIN_LEN) {
             throw new HEException(ASSESSMENT_REVIEW_TOO_SHORT, REVIEW_MIN_LEN);
+        }
+    }
+
+    private void institutionHasCompletedActivity() {
+        if (this.institution == null || !this.institution.getActivities()
+                .stream()
+                .anyMatch(a -> a.getEndingDate().isBefore(this.reviewDate))) {
+            throw new HEException(ASSESSMENT_INSTITUTION_WITHOUT_COMPLETED_ACTIVITY, this.institution.getName());
         }
     }
 

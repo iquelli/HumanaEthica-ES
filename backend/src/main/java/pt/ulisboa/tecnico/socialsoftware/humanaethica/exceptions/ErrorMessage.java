@@ -43,6 +43,7 @@ public enum ErrorMessage {
 
     // Assessment
     ASSESSMENT_REVIEW_TOO_SHORT("Assessment review must have at least %d characters"),
+    ASSESSMENT_INSTITUTION_WITHOUT_COMPLETED_ACTIVITY("The institution %s must have at least one completed activity"),
 
     // Enrollment
     ENROLLMENT_MOTIVATION_TOO_SHORT("Enrollment motivation must have at least %d characters"),
