@@ -10,6 +10,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentD
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import spock.lang.Unroll
 
 @DataJpaTest
@@ -52,6 +53,9 @@ class CreateEnrollmentMethodTest extends SpockTest {
         activity.getName() >> ACTIVITY_NAME_1
         volunteer.getEnrollments() >> [otherEnrollment]
         otherEnrollment.getActivity() >> activity
+        and: "an enrollment dto"
+        enrollmentDto = new EnrollmentDto()
+        enrollmentDto.setMotivation(ENROLLMENT_MOTIVATION_1)
 
         when:
         new Enrollment(activity, volunteer, enrollmentDto)
@@ -68,6 +72,9 @@ class CreateEnrollmentMethodTest extends SpockTest {
         volunteer.getEnrollments() >> [otherEnrollment]
         otherEnrollment.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
+        and: "an enrollment dto"
+        enrollmentDto = new EnrollmentDto()
+        enrollmentDto.setMotivation(ENROLLMENT_MOTIVATION_1)
 
         when:
         new Enrollment(activity, volunteer, enrollmentDto)
@@ -84,6 +91,8 @@ class CreateEnrollmentMethodTest extends SpockTest {
         volunteer.getEnrollments() >> [otherEnrollment]
         otherEnrollment.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
+        and: "an enrollment dto"
+        enrollmentDto = new EnrollmentDto()
         enrollmentDto.setMotivation(motivation)
 
         when:

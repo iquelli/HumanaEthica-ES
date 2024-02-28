@@ -84,7 +84,7 @@ public class Enrollment {
         motivationIsRequired();
         motivationLengthAboveMinimum();
         enrollmentBeforeDeadline();
-        hasEnrolledForActivity();
+        hasNotEnrolledForActivity();
     }
 
     private void motivationIsRequired() {
@@ -106,7 +106,7 @@ public class Enrollment {
         }
     }
 
-    private void hasEnrolledForActivity() {
+    private void hasNotEnrolledForActivity() {
         boolean isEnrolled = volunteer.getEnrollments().stream()
                 .anyMatch(enrollment -> enrollment != this && enrollment.getActivity().getName().equals(this.activity.getName()));
 
