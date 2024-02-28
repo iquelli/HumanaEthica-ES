@@ -38,7 +38,7 @@ public class Participation {
         setAcceptanceDate(DateHandler.now());
         setRating(participationDto.getRating());
 
-        // verifyInvariants();
+        verifyInvariants();
     }
 
 
@@ -82,22 +82,29 @@ public class Participation {
     }
 
     private void verifyInvariants() {
-        participationLimitReached();
-        participatesInActivity();
-        // TODO: 1 invariant
+        numberOfParticipantsBelowLimit();
+        participatesInActivityOnce();
+        participationAfterApplicationDeadline();
     }
 
-    private void  participationLimitReached(){
-       if (activity.getParticipations().stream().count() == activity.getParticipantsNumberLimit()){
+    private void  numberOfParticipantsBelowLimit(){
+       if (activity.getParticipations().stream().count() > activity.getParticipantsNumberLimit()){
            throw new HEException(PARTICIPATION_LIMIT_REACHED, activity.getName());
        }
     }
 
-    private void  participatesInActivity(){
+    private void participatesInActivityOnce(){
         boolean isParticipant = volunteer.getParticipations().stream().
-                anyMatch(participation -> participation.getActivity().getName().equals(activity.getName()));
+                anyMatch(participation -> participation != this && participation.getActivity().getName().equals(activity.getName()));
         if (isParticipant){
             throw new HEException(VOLUNTEER_IS_ALREADY_A_PARTICIPANT, volunteer.getName(), activity.getName());
+        }
+    }
+
+    private void participationAfterApplicationDeadline() {
+        LocalDateTime applicationDeadLine = activity.getApplicationDeadline();
+        if (!this.acceptanceDate.isAfter(applicationDeadLine)) {
+            throw new HEException(PARTICIPATION_BEFORE_APPLICATION_DEADLINE);
         }
     }
 }

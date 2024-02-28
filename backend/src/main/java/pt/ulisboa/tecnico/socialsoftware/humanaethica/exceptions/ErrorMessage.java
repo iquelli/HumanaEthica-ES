@@ -44,9 +44,9 @@ public enum ErrorMessage {
 
     //Participation
     PARTICIPATION_LIMIT_REACHED("Activity %s has already reached its limit of participants"),
-    VOLUNTEER_IS_ALREADY_A_PARTICIPANT("Volunteer %s already participates in activity %s");
+    VOLUNTEER_IS_ALREADY_A_PARTICIPANT("Volunteer %s already participates in activity %s"),
+    PARTICIPATION_BEFORE_APPLICATION_DEADLINE("Activity's application deadline hasn't finished yet");
 
-    //TODO: ONE ERR MSG
 
     public final String label;
 
