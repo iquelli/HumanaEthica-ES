@@ -216,7 +216,12 @@ class SpockTest extends Specification {
         activityDto
     }
 
+    // assessment
+
+    public static final String ASSESMENT_REVIEW_1 = "assessment review 1"
+
     //enrollment
+
     public static final String ENROLLMENT_MOTIVATION_1 = "enrollment motivation 1"
 
     @Autowired
@@ -236,6 +241,5 @@ class SpockTest extends Specification {
         themeRepository.deleteAll()
         enrollmentRepository.deleteAll()
     }
-
 
 }
