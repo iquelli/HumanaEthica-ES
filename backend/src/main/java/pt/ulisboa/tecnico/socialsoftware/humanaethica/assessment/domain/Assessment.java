@@ -101,10 +101,13 @@ public class Assessment {
     }
 
     private void volunteerHasNotAssessedInstituition() {
-        Boolean hasAssessedInstitution = this.institution.getAssessments()
-                                        .stream()
-                                        .anyMatch(a -> a.getVolunteer().getName()
-                                        .equals(this.volunteer.getName()));
+        Boolean hasAssessedInstitution = false;
+        if(this.institution != null && this.institution.getAssessments() != null) {
+            hasAssessedInstitution = this.institution.getAssessments()
+                                            .stream()
+                                            .anyMatch(a -> a.getVolunteer().getName()
+                                            .equals(this.volunteer.getName()));
+        }
 
         if (this.volunteer == null || hasAssessedInstitution) {
             throw new HEException(ASSESSMENT_VOLUNTEER_HAS_ASSESSED_INSTITUTION, this.volunteer.getName(),

@@ -58,9 +58,6 @@ class CreateAssessmentMethodTest extends SpockTest {
         activity.getEndingDate() >> TWO_DAYS_AGO
         institution.getActivities() >> [activity]
         volunteer.getName() >> USER_1_NAME
-        institution.getAssessments() >> [otherAssessment]
-        otherAssessment.getVolunteer() >> otherVolunteer
-        otherVolunteer.getName() >> USER_2_NAME
         assessmentDto.setReview(review)
 
         when:
@@ -72,7 +69,20 @@ class CreateAssessmentMethodTest extends SpockTest {
 
         where:
         review << [null, "", " ", "123456789", "review"]
+    }
 
+    def "create assessment and violate institution must have a completed activity"() {
+        given:
+        activity.getEndingDate() >> IN_TWO_DAYS
+        institution.getActivities() >> [activity]
+        volunteer.getName() >> USER_1_NAME
+
+        when:
+        def result = new Assessment(assessmentDto, institution, volunteer)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == ErrorMessage.ASSESSMENT_INSTITUTION_WITHOUT_COMPLETED_ACTIVITY
     }
 
     @TestConfiguration
