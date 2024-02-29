@@ -93,7 +93,7 @@ class SpockTest extends Specification {
     public static final String USER_2_TOKEN = "c3b2a1"
 
     public static final String VOLUNTEER_DEMO_NAME = "DEMO-VOLUNTEER"
-    
+
     @Autowired
     AuthUserService authUserService
 
@@ -243,6 +243,11 @@ class SpockTest extends Specification {
 
     @Autowired
     EnrollmentService enrollmentService
+
+    // participation
+
+    public static final Integer RATING_1 = 5
+
 
     // clean database
 
