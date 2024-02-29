@@ -53,6 +53,28 @@ class CreateAssessmentMethodTest extends SpockTest {
         1 * institution.addAssessment(_)
     }
 
+    def "create assessement and violate review cannot have less than 10 characters"() {
+        given:
+        activity.getEndingDate() >> TWO_DAYS_AGO
+        institution.getActivities() >> [activity]
+        volunteer.getName() >> USER_1_NAME
+        institution.getAssessments() >> [otherAssessment]
+        otherAssessment.getVolunteer() >> otherVolunteer
+        otherVolunteer.getName() >> USER_2_NAME
+        assessmentDto.setReview(review)
+
+        when:
+        def result = new Assessment(assessmentDto, institution, volunteer)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == ErrorMessage.ASSESSMENT_REVIEW_TOO_SHORT
+
+        where:
+        review << [null, "", " ", "123456789", "review"]
+
+    }
+
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
 }
