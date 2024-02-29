@@ -84,6 +84,7 @@ class CreateEnrollmentMethodTest extends SpockTest {
         error.getErrorMessage() == ErrorMessage.ENROLLMENT_PERIOD_CLOSED
     }
 
+    @Unroll
     def "create enrollment and violate volunteers must provide a motivation of at least 10 character"() {
         given:
         activity.getApplicationDeadline() >> IN_TWO_DAYS
