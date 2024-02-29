@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.dto;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
@@ -25,6 +26,8 @@ public class InstitutionDto {
     private List<ThemeDto> themeDto = new ArrayList<>();
 
     private List<ActivityDto> activityDto = new ArrayList<>();
+
+    private List<AssessmentDto> assessmentDto = new ArrayList<>();
 
     public InstitutionDto(){
     }
@@ -125,5 +128,13 @@ public class InstitutionDto {
 
     public void setActivities(List<ActivityDto> activityDto) {
         this.activityDto = activityDto;
+    }
+
+    public List<AssessmentDto>getAssessments() {
+        return assessmentDto;
+    }
+
+    public void setAssessments(List<AssessmentDto> assessmentDto) {
+        this.assessmentDto = assessmentDto;
     }
 }
