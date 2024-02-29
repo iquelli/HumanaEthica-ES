@@ -214,6 +214,10 @@ class SpockTest extends Specification {
         activityDto
     }
 
+    // assessment
+    
+    public static final String ASSESMENT_REVIEW_1 = "assessment review 1"
+
     // clean database
 
     def deleteAll() {
