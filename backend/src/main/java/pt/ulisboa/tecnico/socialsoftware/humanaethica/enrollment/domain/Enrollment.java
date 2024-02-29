@@ -14,12 +14,13 @@ import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMes
 @Entity
 @Table(name = "enrollment")
 public class Enrollment {
-    
+
     private static final int MOTIVATION_MINIMUM_LENGTH = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String motivation;
 
     @ManyToOne
