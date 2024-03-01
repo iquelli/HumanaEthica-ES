@@ -87,7 +87,7 @@ public class Participation {
         participationAfterApplicationDeadline();
     }
 
-    private void  numberOfParticipantsBelowLimit(){
+    private void numberOfParticipantsBelowLimit(){
        if (activity.getParticipations().stream().count() > activity.getParticipantsNumberLimit()){
            throw new HEException(PARTICIPATION_LIMIT_REACHED, activity.getName());
        }

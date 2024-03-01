@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain
+package pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.TestConfiguration
@@ -22,9 +22,7 @@ class CreateParticipationMethodTest extends SpockTest {
     Participation otherParticipation = Mock()
     Participation otherParticipation_2 = Mock()
     Participation otherParticipation_3 = Mock()
-    Participation otherParticipation_4 = Mock()
-    Participation otherParticipation_5 = Mock()
-    Participation otherParticipation_6 = Mock()
+
     def participationDto
 
     def setup() {
@@ -33,17 +31,18 @@ class CreateParticipationMethodTest extends SpockTest {
         participationDto.rating = RATING_1;
     }
 
-    def "create successful participation with activity and volunteer having one another participation each: participants=#participants"() {
+    def "create successful participation with activity and volunteer having one another participation each"() {
         given:
-        activity.getParticipantsNumberLimit() >> participants
+        activity.getName() >> ACTIVITY_NAME_1
+        activity.getApplicationDeadline() >> ONE_DAY_AGO
+        activity.getParticipantsNumberLimit() >> 2
         activity.getParticipations() >> [otherParticipation_2]
         volunteer.getParticipations() >> [otherParticipation]
         otherParticipation.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
-        activity.getApplicationDeadline() >> ONE_DAY_AGO
 
         when:
-        def result = new Paricipation(activity, volunteer, participationDto)
+        def result = new Participation(activity, volunteer, participationDto)
 
         then: "check result"
         result.getActivity() == activity
@@ -52,61 +51,55 @@ class CreateParticipationMethodTest extends SpockTest {
         and: "invocations"
         1 * activity.addParticipation(_)
         1 * volunteer.addParticipation(_)
-
-        where participants << [2,3,4,5]
     }
 
     @Unroll
     def "create participation and violates activity participation limit"() {
         given:
-        activity.getParticipantsNumberLimit() >> limitOfParticipants
-        activity.getParticipations() >> participants
-        volunteer.getParticipations() >> [otherParticipation]
-        otherParticipation.getActivity() >> otherActivity
-        otherActivity.getName() >> ACTIVITY_NAME_2
+        activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
+        activity.getParticipantsNumberLimit() >> participantsLimit
+        activity.getParticipations() >> [otherParticipation, otherParticipation_2]
+
+        // TODO: is this needed? test passes without it!
+        // however, could be needed for participatesInActivityOnce if the first invariant
+        // wasnt broken...
+        // above
+        volunteer.getParticipations() >> [otherParticipation_3]
+        otherParticipation_3.getActivity() >> otherActivity
+        otherActivity.getName() >> ACTIVITY_NAME_2
 
         and: "a participation dto"
-        participationDto = new ActivityDto()
-        participationDto.setActivity(activity)
-        participationDto.setVolunteer(volunteer)
+        participationDto = new ParticipationDto()
         participationDto.setRating(RATING_1)
 
         when:
-        new Paricipation(activity, volunteer, participationDto)
+        new Participation(activity, volunteer, participationDto)
 
         then:
         def error = thrown(HEException)
         error.getErrorMessage() == ErrorMessage.PARTICIPATION_LIMIT_REACHED
 
         where:
-        participants || limitOfParticipants   //ASK TEACHER ABOUT MAKING THIS SIMPLER
-        [otherParticipation_2] || 1
-        [otherParticipation_2, otherParticipation_3]|| 2
-        [otherParticipation_2, otherParticipation_3, otherParticipation_4]|| 3
-        [otherParticipation_2, otherParticipation_3, otherParticipation_4, otherParticipation_5]|| 4
-        [otherParticipation_2, otherParticipation_3, otherParticipation_4, otherParticipation_5, otherParticipation_6]|| 5
+        participantsLimit << [-1, 0, 1] // TODO: is null suppose to work?
     }
 
     @Unroll
     def "create participation and violates activity unique participation"() {
         given:
-        activity.getParticipantsNumberLimit() >> 5
-        activity.getParticipations() >> [otherParticipation]
-        volunteer.getParticipations() >> [otherParticipation]   //ASK TEACHER ABOUT REDUNDANT INFO
-        otherParticipation.setActivity(activity)
         activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
+        activity.getParticipantsNumberLimit() >> 5
+        activity.getParticipations() >> [otherParticipation, otherParticipation_2]
+        volunteer.getParticipations() >> [otherParticipation]
+        otherParticipation.getActivity() >> activity
 
         and: "a participation dto"
-        participationDto = new ActivityDto()
-        participationDto.setActivity(activity)
-        participationDto.setVolunteer(volunteer)
+        participationDto = new ParticipationDto()
         participationDto.setRating(RATING_1)
 
-
         when:
-        new Paricipation(activity, volunteer, participationDto)
+        new Participation(activity, volunteer, participationDto)
 
         then:
         def error = thrown(HEException)
