@@ -36,9 +36,9 @@ class CreateParticipationMethodTest extends SpockTest {
         activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
         activity.getParticipantsNumberLimit() >> 2
-        activity.getParticipations() >> [otherParticipation_2]
-        volunteer.getParticipations() >> [otherParticipation]
-        otherParticipation.getActivity() >> otherActivity
+        activity.getParticipations() >> [otherParticipation]
+        volunteer.getParticipations() >> [otherParticipation_2]
+        otherParticipation_2.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
 
         when:
@@ -54,24 +54,15 @@ class CreateParticipationMethodTest extends SpockTest {
     }
 
     @Unroll
-    def "create participation and violates activity participation limit"() {
+    def "create participation and violate activity participation limit invariant"() {
         given:
         activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
         activity.getParticipantsNumberLimit() >> participantsLimit
         activity.getParticipations() >> [otherParticipation, otherParticipation_2]
-
-        // TODO: is this needed? test passes without it!
-        // however, could be needed for participatesInActivityOnce if the first invariant
-        // wasnt broken...
-        // above
         volunteer.getParticipations() >> [otherParticipation_3]
         otherParticipation_3.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
-
-        and: "a participation dto"
-        participationDto = new ParticipationDto()
-        participationDto.setRating(RATING_1)
 
         when:
         new Participation(activity, volunteer, participationDto)
@@ -85,7 +76,7 @@ class CreateParticipationMethodTest extends SpockTest {
     }
 
     @Unroll
-    def "create participation and violates activity unique participation"() {
+    def "create participation and violate activity unique participation invariant"() {
         given:
         activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
@@ -93,10 +84,6 @@ class CreateParticipationMethodTest extends SpockTest {
         activity.getParticipations() >> [otherParticipation, otherParticipation_2]
         volunteer.getParticipations() >> [otherParticipation]
         otherParticipation.getActivity() >> activity
-
-        and: "a participation dto"
-        participationDto = new ParticipationDto()
-        participationDto.setRating(RATING_1)
 
         when:
         new Participation(activity, volunteer, participationDto)
@@ -106,7 +93,24 @@ class CreateParticipationMethodTest extends SpockTest {
         error.getErrorMessage() == ErrorMessage.VOLUNTEER_IS_ALREADY_A_PARTICIPANT
     }
 
-    // TODO: ADD 3RD TEST
+    @Unroll
+    def "create participation and violate application after deadline invariant"() {
+        given:
+        activity.getName() >> ACTIVITY_NAME_1
+        activity.getApplicationDeadline() >> IN_ONE_DAY
+        activity.getParticipantsNumberLimit() >> 2
+        activity.getParticipations() >> [otherParticipation]
+        volunteer.getParticipations() >> [otherParticipation_2]
+        otherParticipation_2.getActivity() >> otherActivity
+        otherActivity.getName() >> ACTIVITY_NAME_2
+
+        when:
+        new Participation(activity, volunteer, participationDto)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == ErrorMessage.PARTICIPATION_BEFORE_APPLICATION_DEADLINE
+    }
 
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
