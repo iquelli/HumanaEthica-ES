@@ -12,6 +12,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.dto.AuthPasswordDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.repository.AuthUserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoUtils
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.EnrollmentService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.repository.EnrollmentRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserApplicationalService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserService
@@ -216,6 +219,12 @@ class SpockTest extends Specification {
 
     //enrollment
     public static final String ENROLLMENT_MOTIVATION_1 = "enrollment motivation 1"
+
+    @Autowired
+    EnrollmentRepository enrollmentRepository
+
+    @Autowired
+    EnrollmentService enrollmentService
 
     // clean database
 
