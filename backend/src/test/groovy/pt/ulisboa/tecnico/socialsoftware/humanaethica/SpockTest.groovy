@@ -28,6 +28,15 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserApplicationalServ
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.InstitutionService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.InstitutionRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.ActivityService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.repository.ParticipationRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.Mailer
 import spock.lang.Specification
@@ -247,6 +256,13 @@ class SpockTest extends Specification {
     // participation
 
     public static final Integer RATING_1 = 5
+
+    @Autowired
+    ParticipationRepository participationRepository
+
+    @Autowired
+    ParticipationService participationService
+
 
 
     // clean database
