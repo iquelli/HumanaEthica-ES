@@ -21,6 +21,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.InstitutionSer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.InstitutionRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.ActivityService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.repository.ParticipationRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
@@ -45,6 +48,7 @@ class SpockTest extends Specification {
 
     // dates
 
+    public static final LocalDateTime THREE_DAYS_AGO = DateHandler.now().minusDays(3)
     public static final LocalDateTime TWO_DAYS_AGO = DateHandler.now().minusDays(2)
     public static final LocalDateTime ONE_DAY_AGO = DateHandler.now().minusDays(1)
     public static final LocalDateTime NOW = DateHandler.now()
@@ -217,6 +221,13 @@ class SpockTest extends Specification {
     // participation
 
     public static final Integer RATING_1 = 5
+
+    @Autowired
+    ParticipationRepository participationRepository
+
+    @Autowired
+    ParticipationService participationService
+
 
 
     // clean database
