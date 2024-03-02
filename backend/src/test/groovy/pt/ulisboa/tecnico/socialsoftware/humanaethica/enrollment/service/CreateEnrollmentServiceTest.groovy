@@ -6,11 +6,17 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.BeanConfiguration
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto
+import spock.lang.Unroll
 
 @DataJpaTest
-class CreateEnrollmentServiceTest extends SpockTest{
+class CreateEnrollmentServiceTest extends SpockTest {
+
+    public static final String EXIST = "exist"
+    public static final String NO_EXIST = "noExist"
 
     def volunteer
     def activity
@@ -54,6 +60,48 @@ class CreateEnrollmentServiceTest extends SpockTest{
         storedEnrollment.motivation == ENROLLMENT_MOTIVATION_1
         storedEnrollment.activity.id == activity.id
         storedEnrollment.volunteer.id == volunteer.id
+    }
+
+    @Unroll
+    def "invalid arguments: motivation=#motivation | volunteerId=#volunteerId | activityId=#activityId"() {
+        given: "an enrollment dto"
+
+        def enrollmentDto = new EnrollmentDto()
+        enrollmentDto.setMotivation(motivation)
+
+        when:
+        enrollmentService.createEnrollment(getVolunteerId(volunteerId), getActivityId(activityId), enrollmentDto)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == errorMessage
+        and: "no enrollment is stored in the database"
+        enrollmentRepository.count() == 0
+
+
+        where:
+        motivation              | volunteerId | activityId  || errorMessage
+        null                    | EXIST       | EXIST       || ErrorMessage.ENROLLMENT_MOTIVATION_TOO_SHORT
+        ENROLLMENT_MOTIVATION_1 | null        | EXIST       || ErrorMessage.USER_NOT_FOUND
+        ENROLLMENT_MOTIVATION_1 | NO_EXIST    | EXIST       || ErrorMessage.USER_NOT_FOUND
+        ENROLLMENT_MOTIVATION_1 | EXIST       | null        || ErrorMessage.ACTIVITY_NOT_FOUND
+        ENROLLMENT_MOTIVATION_1 | EXIST       | NO_EXIST    || ErrorMessage.ACTIVITY_NOT_FOUND
+    }
+
+    def getVolunteerId(volunteerId){
+        if (volunteerId == EXIST)
+            return volunteer.id
+        else if (volunteerId == NO_EXIST)
+            return 222
+        return null
+    }
+
+    def getActivityId(activityId){
+        if (activityId == EXIST)
+            return activity.id
+        else if (activityId == NO_EXIST)
+            return 222
+        return null
     }
 
     @TestConfiguration
