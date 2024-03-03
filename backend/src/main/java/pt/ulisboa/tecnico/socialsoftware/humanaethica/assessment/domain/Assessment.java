@@ -81,13 +81,20 @@ public class Assessment {
     }
 
     private void verifyInvariants() {
+        reviewIsRequired();
         reviewLengthAboveMinimumLength();
         institutionHasCompletedActivity();
         volunteerHasNotAssessedInstituition();
     }
 
+    private void reviewIsRequired() {
+        if (this.review == null || this.review.trim().isEmpty()) {
+            throw new HEException(ASSESSMENT_REVIEW_TOO_SHORT, REVIEW_MIN_LEN);
+        }
+    }
+
     private void reviewLengthAboveMinimumLength() {
-        if (this.review == null || this.review.length() < REVIEW_MIN_LEN) {
+        if (this.review.length() < REVIEW_MIN_LEN) {
             throw new HEException(ASSESSMENT_REVIEW_TOO_SHORT, REVIEW_MIN_LEN);
         }
     }
