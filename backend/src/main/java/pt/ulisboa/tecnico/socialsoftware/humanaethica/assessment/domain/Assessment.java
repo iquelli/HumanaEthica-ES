@@ -33,7 +33,7 @@ public class Assessment {
     public Assessment() {
     }
 
-    public Assessment(AssessmentDto assessmentDto, Institution institution, Volunteer volunteer) {
+    public Assessment(Institution institution, Volunteer volunteer, AssessmentDto assessmentDto) {
         setReview(assessmentDto.getReview());
         setReviewDate(DateHandler.now());
         setInstitution(institution);

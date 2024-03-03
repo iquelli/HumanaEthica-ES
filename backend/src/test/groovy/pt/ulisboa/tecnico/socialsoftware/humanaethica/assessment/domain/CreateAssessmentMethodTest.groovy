@@ -40,8 +40,12 @@ class CreateAssessmentMethodTest extends SpockTest {
         otherAssessment.getVolunteer() >> otherVolunteer
         otherVolunteer.getName() >> USER_2_NAME
 
+        and: "an assessment dto"
+        assessmentDto = new AssessmentDto()
+        assessmentDto.setReview(ASSESMENT_REVIEW_1)
+
         when:
-        def result = new Assessment(assessmentDto, institution, volunteer)
+        def result = new Assessment(institution, volunteer, assessmentDto)
 
         then: "check result"
         result.getInstitution() == institution
@@ -59,12 +63,13 @@ class CreateAssessmentMethodTest extends SpockTest {
         institution.getActivities() >> [activity]
         institution.getName() >> INSTITUTION_1_NAME
         volunteer.getName() >> USER_1_NAME
+
         and: "an assessment dto"
         assessmentDto = new AssessmentDto()
         assessmentDto.setReview(review)
 
         when:
-        def result = new Assessment(assessmentDto, institution, volunteer)
+        def result = new Assessment(institution, volunteer, assessmentDto)
 
         then:
         def error = thrown(HEException)
@@ -80,12 +85,13 @@ class CreateAssessmentMethodTest extends SpockTest {
         institution.getActivities() >> [activity]
         institution.getName() >> INSTITUTION_1_NAME
         volunteer.getName() >> USER_1_NAME
+
         and: "an assessment dto"
         assessmentDto = new AssessmentDto()
         assessmentDto.setReview(ASSESMENT_REVIEW_1)
 
         when:
-        def result = new Assessment(assessmentDto, institution, volunteer)
+        def result = new Assessment(institution, volunteer, assessmentDto)
 
         then:
         def error = thrown(HEException)
@@ -100,12 +106,13 @@ class CreateAssessmentMethodTest extends SpockTest {
         institution.getAssessments() >> [otherAssessment]
         institution.getName() >> INSTITUTION_1_NAME
         otherAssessment.getVolunteer() >> volunteer
+
         and: "an assessment dto"
         assessmentDto = new AssessmentDto()
         assessmentDto.setReview(ASSESMENT_REVIEW_1)
 
         when:
-        def result = new Assessment(assessmentDto, institution, volunteer)
+        def result = new Assessment(institution, volunteer, assessmentDto)
 
         then:
         def error = thrown(HEException)
