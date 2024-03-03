@@ -36,6 +36,7 @@ class CreateAssessmentMethodTest extends SpockTest {
         institution.getActivities() >> [activity]
         volunteer.getName() >> USER_1_NAME
         institution.getAssessments() >> [otherAssessment]
+        institution.getName() >> INSTITUTION_1_NAME
         otherAssessment.getVolunteer() >> otherVolunteer
         otherVolunteer.getName() >> USER_2_NAME
 
@@ -56,7 +57,10 @@ class CreateAssessmentMethodTest extends SpockTest {
         given:
         activity.getEndingDate() >> TWO_DAYS_AGO
         institution.getActivities() >> [activity]
+        institution.getName() >> INSTITUTION_1_NAME
         volunteer.getName() >> USER_1_NAME
+        and: "an assessment dto"
+        assessmentDto = new AssessmentDto()
         assessmentDto.setReview(review)
 
         when:
@@ -74,7 +78,11 @@ class CreateAssessmentMethodTest extends SpockTest {
         given:
         activity.getEndingDate() >> IN_TWO_DAYS
         institution.getActivities() >> [activity]
+        institution.getName() >> INSTITUTION_1_NAME
         volunteer.getName() >> USER_1_NAME
+        and: "an assessment dto"
+        assessmentDto = new AssessmentDto()
+        assessmentDto.setReview(ASSESMENT_REVIEW_1)
 
         when:
         def result = new Assessment(assessmentDto, institution, volunteer)
@@ -90,7 +98,11 @@ class CreateAssessmentMethodTest extends SpockTest {
         institution.getActivities() >> [activity]
         volunteer.getName() >> USER_1_NAME
         institution.getAssessments() >> [otherAssessment]
+        institution.getName() >> INSTITUTION_1_NAME
         otherAssessment.getVolunteer() >> volunteer
+        and: "an assessment dto"
+        assessmentDto = new AssessmentDto()
+        assessmentDto.setReview(ASSESMENT_REVIEW_1)
 
         when:
         def result = new Assessment(assessmentDto, institution, volunteer)
