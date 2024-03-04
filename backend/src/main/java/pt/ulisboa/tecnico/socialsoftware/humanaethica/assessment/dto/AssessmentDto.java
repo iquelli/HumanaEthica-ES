@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto;
 
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.domain.Assessment;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.dto.InstitutionDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto;
@@ -19,12 +20,19 @@ public class AssessmentDto {
     public AssessmentDto() {
     }
 
-    public AssessmentDto(Assessment assessment) {
+    public AssessmentDto(Assessment assessment, boolean deepCopyVolunteer, boolean deepCopyInstitution) {
         setId(assessment.getId());
         setReview(assessment.getReview());
         setReviewDate(DateHandler.toISOString(assessment.getReviewDate()));
-        setInstitution(new InstitutionDto(assessment.getInstitution(), false, false));
-        setVolunteer(new UserDto(assessment.getVolunteer()));
+
+        if (deepCopyInstitution && (assessment.getInstitution() != null)) {
+            setInstitution(new InstitutionDto(assessment.getInstitution()));
+        }
+
+        if (deepCopyVolunteer && (assessment.getVolunteer() != null)) {
+            setVolunteer(new UserDto(assessment.getVolunteer()));
+        }
+
     }
 
     public Integer getId() {
