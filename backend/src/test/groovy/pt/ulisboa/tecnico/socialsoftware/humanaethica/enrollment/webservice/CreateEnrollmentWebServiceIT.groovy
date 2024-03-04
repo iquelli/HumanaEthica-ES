@@ -5,13 +5,11 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
+import org.springframework.http.HttpStatus
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.repository.EnrollmentRepository
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto
-
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CreateEnrollmentWebServiceIT extends SpockTest {
@@ -63,6 +61,50 @@ class CreateEnrollmentWebServiceIT extends SpockTest {
         enrollmentRepository.count() == 1
         def enrollment = enrollmentRepository.findAll().get(0)
         enrollment.getMotivation() == ENROLLMENT_MOTIVATION_1
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as member, and enroll to activity"() {
+        given: 'a member'
+        demoMemberLogin()
+
+        when: 'the member enrolls to activity'
+        webClient.post()
+                .uri('/enrollments/'+ activityId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(enrollmentDto)
+                .retrieve()
+                .bodyToMono(EnrollmentDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+        enrollmentRepository.count() == 0
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as admin, and enroll to activity"() {
+        given: 'an admin'
+        demoAdminLogin()
+
+        when: 'the admin enrolls to activity'
+        webClient.post()
+                .uri('/enrollments/'+ activityId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(enrollmentDto)
+                .retrieve()
+                .bodyToMono(EnrollmentDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+        enrollmentRepository.count() == 0
 
         cleanup:
         deleteAll()
