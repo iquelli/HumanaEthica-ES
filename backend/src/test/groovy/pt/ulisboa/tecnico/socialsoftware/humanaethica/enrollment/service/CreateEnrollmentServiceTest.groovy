@@ -24,19 +24,14 @@ class CreateEnrollmentServiceTest extends SpockTest {
     def setup() {
         volunteer = authUserService.loginDemoVolunteerAuth().getUser()
 
-        //TODO check if right
         def institution = institutionService.getDemoInstitution()
 
-        def theme = new Theme(THEME_NAME_1, Theme.State.APPROVED,null)
-        themeRepository.save(theme)
-
         def themesDto = new ArrayList<>()
-        themesDto.add(new ThemeDto(theme,false,false,false))
 
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
                 IN_ONE_DAY,IN_TWO_DAYS,IN_THREE_DAYS,themesDto)
 
-        activity = new Activity(activityDto, institution, [theme] )
+        activity = new Activity(activityDto, institution, [])
         activityRepository.save(activity)
     }
 
