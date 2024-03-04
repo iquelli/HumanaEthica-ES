@@ -16,9 +16,12 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser
 @DataJpaTest
 class CreateParticipationServiceTest extends SpockTest{
 
+    def volunteer
+    def activity
+
     def setup() {
 
-        def volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
         userRepository.save(volunteer)
 
         def institution = institutionService.getDemoInstitution()
@@ -32,7 +35,7 @@ class CreateParticipationServiceTest extends SpockTest{
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
                 THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,themesDto)
 
-        def activity = new Activity(activityDto, institution, [theme] )
+        activity = new Activity(activityDto, institution, [theme] )
         activityRepository.save(activity)
     }
 
