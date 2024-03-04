@@ -27,7 +27,7 @@ class CreateAssessmentMethodTest extends SpockTest {
     def setup() {
         given: "assessment info"
         assessmentDto = new AssessmentDto()
-        assessmentDto.review = ASSESMENT_REVIEW_1
+        assessmentDto.review = ASSESSMENT_REVIEW_1
     }
 
     def "create successful assessment with volunteer and institution has another assessment"() {
@@ -42,7 +42,7 @@ class CreateAssessmentMethodTest extends SpockTest {
 
         and: "an assessment dto"
         assessmentDto = new AssessmentDto()
-        assessmentDto.setReview(ASSESMENT_REVIEW_1)
+        assessmentDto.setReview(ASSESSMENT_REVIEW_1)
 
         when:
         def result = new Assessment(institution, volunteer, assessmentDto)
@@ -50,7 +50,7 @@ class CreateAssessmentMethodTest extends SpockTest {
         then: "check result"
         result.getInstitution() == institution
         result.getVolunteer() == volunteer
-        result.getReview() == ASSESMENT_REVIEW_1
+        result.getReview() == ASSESSMENT_REVIEW_1
 
         and: "invocations"
         1 * volunteer.addAssessment(_)
@@ -88,7 +88,7 @@ class CreateAssessmentMethodTest extends SpockTest {
 
         and: "an assessment dto"
         assessmentDto = new AssessmentDto()
-        assessmentDto.setReview(ASSESMENT_REVIEW_1)
+        assessmentDto.setReview(ASSESSMENT_REVIEW_1)
 
         when:
         def result = new Assessment(institution, volunteer, assessmentDto)
@@ -109,7 +109,7 @@ class CreateAssessmentMethodTest extends SpockTest {
 
         and: "an assessment dto"
         assessmentDto = new AssessmentDto()
-        assessmentDto.setReview(ASSESMENT_REVIEW_1)
+        assessmentDto.setReview(ASSESSMENT_REVIEW_1)
 
         when:
         def result = new Assessment(institution, volunteer, assessmentDto)

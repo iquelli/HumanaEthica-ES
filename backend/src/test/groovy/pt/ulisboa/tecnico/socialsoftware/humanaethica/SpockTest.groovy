@@ -12,6 +12,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.dto.AuthPasswordDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.repository.AuthUserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.demo.DemoUtils
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.AssessmentService
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.repository.AssessmentRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserApplicationalService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.UserService
@@ -45,6 +48,7 @@ class SpockTest extends Specification {
 
     // dates
 
+    public static final LocalDateTime THREE_DAYS_AGO = DateHandler.now().minusDays(3)
     public static final LocalDateTime TWO_DAYS_AGO = DateHandler.now().minusDays(2)
     public static final LocalDateTime ONE_DAY_AGO = DateHandler.now().minusDays(1)
     public static final LocalDateTime NOW = DateHandler.now()
@@ -216,7 +220,13 @@ class SpockTest extends Specification {
 
     // assessment
     
-    public static final String ASSESMENT_REVIEW_1 = "assessment review 1"
+    public static final String ASSESSMENT_REVIEW_1 = "assessment review 1"
+
+    @Autowired
+    AssessmentRepository assessmentRepository
+
+    @Autowired
+    AssessmentService assessmentService
 
     // clean database
 
