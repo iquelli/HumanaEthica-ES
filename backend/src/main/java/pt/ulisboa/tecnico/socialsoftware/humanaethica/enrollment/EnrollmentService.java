@@ -37,7 +37,6 @@ public class EnrollmentService {
 
         enrollmentRepository.save(enrollment);
 
-        //TODO check if more arguments needed
-        return new EnrollmentDto(enrollment);
+        return new EnrollmentDto(enrollment, true, true);
     }
 }
