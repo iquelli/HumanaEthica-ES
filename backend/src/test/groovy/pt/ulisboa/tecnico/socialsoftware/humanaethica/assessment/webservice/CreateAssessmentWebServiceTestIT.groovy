@@ -4,13 +4,12 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.repository.AssessmentRepository
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CreateAssessmentWebServiceTestIT extends SpockTest {
@@ -70,5 +69,50 @@ class CreateAssessmentWebServiceTestIT extends SpockTest {
         cleanup:
         deleteAll()
     }
+
+    def "login as member, and assess an institution"() {
+        given: 'a member'
+        demoMemberLogin()
+
+        when: 'the member assesses an institution'
+        webClient.post()
+                .uri('/assessments/' + institutionId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(assessmentDto)
+                .retrieve()
+                .bodyToMono(AssessmentDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+        assessmentRepository.count() == 0
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as admin, and assess an institution"() {
+        given: 'an admin'
+        demoAdminLogin()
+
+        when: 'the admin assesses an institution'
+                webClient.post()
+                .uri('/assessments/' + institutionId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(assessmentDto)
+                .retrieve()
+                .bodyToMono(AssessmentDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+        assessmentRepository.count() == 0
+
+        cleanup:
+        deleteAll()
+    }
+
 
 }
