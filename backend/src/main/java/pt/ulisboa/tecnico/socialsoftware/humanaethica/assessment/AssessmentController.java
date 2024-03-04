@@ -22,7 +22,7 @@ public class AssessmentController {
     private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
     @PostMapping("/{institutionId}")
-    @PreAuthorize("hasRole('ROLE_VOLUNTEER') and hasPermission(#institutionId, 'INSTITUTION.MEMBER')")
+    @PreAuthorize("(hasRole('ROLE_VOLUNTEER'))") 
     public AssessmentDto createAssessment(Principal principal, @PathVariable Integer institutionId, @Valid @RequestBody AssessmentDto assessmentDto) {
         int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
         return assessmentService.createAssessment(userId, institutionId, assessmentDto);

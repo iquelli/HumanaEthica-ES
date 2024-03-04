@@ -62,6 +62,8 @@ class SpockTest extends Specification {
     public static final String INSTITUTION_1_NAME = "institution1"
     public static final String INSTITUTION_1_NIF = "123456789"
 
+    public static final String INSTITUTION_DEMO_NAME = "DEMO INSTITUTION"
+
     @Autowired
     InstitutionService institutionService
 
@@ -88,6 +90,8 @@ class SpockTest extends Specification {
     public static final String USER_1_TOKEN = "1a2b3c"
     public static final String USER_2_TOKEN = "c3b2a1"
 
+    public static final String VOLUNTEER_DEMO_NAME = "DEMO-VOLUNTEER"
+    
     @Autowired
     AuthUserService authUserService
 
