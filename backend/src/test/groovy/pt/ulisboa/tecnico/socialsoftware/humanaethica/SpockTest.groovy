@@ -263,8 +263,6 @@ class SpockTest extends Specification {
     @Autowired
     ParticipationService participationService
 
-
-
     // clean database
 
     def deleteAll() {
@@ -276,6 +274,7 @@ class SpockTest extends Specification {
         themeRepository.deleteAll()
         assessmentRepository.deleteAll()
         enrollmentRepository.deleteAll()
+        participationRepository.deleteAll()
     }
 
 }

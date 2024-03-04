@@ -8,15 +8,18 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser
 
 @DataJpaTest
 class CreateParticipationServiceTest extends SpockTest{
 
-    def volunteer
-    def activity
-
     def setup() {
-        volunteer = authUserService.loginDemoVolunteerAuth().getUser()
+
+        def volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        userRepository.save(volunteer)
 
         def institution = institutionService.getDemoInstitution()
 
@@ -29,7 +32,7 @@ class CreateParticipationServiceTest extends SpockTest{
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
                 THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,themesDto)
 
-        activity = new Activity(activityDto, institution, [theme] )
+        def activity = new Activity(activityDto, institution, [theme] )
         activityRepository.save(activity)
     }
 
@@ -37,10 +40,12 @@ class CreateParticipationServiceTest extends SpockTest{
         given: "an participation dto"
 
         def participationDto = new ParticipationDto()
+        def volunteerDto = new UserDto(volunteer.getAuthUser())
         participationDto.setRating(RATING_1)
+        participationDto.setVolunteer(volunteerDto)
 
         when:
-        def result = participationService.createParticipation(volunteer.getId(), activity.getId(), participationDto)
+        def result = participationService.createParticipation(activity.getId(), participationDto)
 
         then: "the returned data is correct"
         result.rating == RATING_1
