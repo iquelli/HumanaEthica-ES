@@ -12,6 +12,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.Activi
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.repository.ParticipationRepository;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository;
 
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
@@ -30,12 +31,14 @@ public class ParticipationService {
     public ParticipationDto createParticipation(Integer activityId, ParticipationDto participationDto) {
 
         if (activityId == null) throw new HEException(ACTIVITY_NOT_FOUND);
-        Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
+        Activity activity = activityRepository.findById(activityId).orElseThrow(()
+                -> new HEException(ACTIVITY_NOT_FOUND, activityId));
 
-        Integer volunteerId = participationDto.getVolunteer().getId();
-        if (volunteerId == null) throw new HEException(USER_NOT_FOUND);
+        UserDto volunteerDto = participationDto.getVolunteer();
+        if (volunteerDto == null) throw new HEException(USER_NOT_FOUND);
 
-        Volunteer volunteer = (Volunteer) userRepository.findById(volunteerId).orElseThrow(() -> new HEException(USER_NOT_FOUND, volunteerId));
+        Volunteer volunteer = (Volunteer) userRepository.findById(volunteerDto.getId()).orElseThrow(()
+                -> new HEException(USER_NOT_FOUND, volunteerDto.getId()));
 
         Participation participation = new Participation(activity, volunteer, participationDto);
 
