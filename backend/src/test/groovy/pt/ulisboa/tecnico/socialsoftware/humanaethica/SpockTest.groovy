@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.socialsoftware.humanaethica
 
+import org.springframework.http.HttpHeaders
+import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -30,10 +32,10 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Member
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.InstitutionService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.repository.InstitutionRepository
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.repository.ActivityRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.ActivityService
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.ParticipationService
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.repository.ParticipationRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.repository.ThemeRepository
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.ThemeService
@@ -122,7 +124,7 @@ class SpockTest extends Specification {
     PasswordEncoder passwordEncoder
 
     @Autowired
-    DemoService demoService;
+    DemoService demoService
 
     @Autowired
     DemoUtils demoUtils
