@@ -109,7 +109,8 @@ public class Enrollment {
 
     private void hasNotEnrolledForActivity() {
         boolean isEnrolled = volunteer.getEnrollments().stream()
-                .anyMatch(enrollment -> enrollment != this && enrollment.getActivity().getName().equals(this.activity.getName()));
+                .anyMatch(enrollment -> enrollment != this &&
+                enrollment.getActivity().getName().equals(this.activity.getName()));
 
         if (isEnrolled) {
             throw new HEException(VOLUNTEER_ALREADY_ENROLLED, volunteer.getName(), activity.getName());

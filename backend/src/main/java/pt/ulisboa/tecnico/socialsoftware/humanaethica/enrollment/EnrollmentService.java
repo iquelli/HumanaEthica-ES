@@ -28,10 +28,12 @@ public class EnrollmentService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public EnrollmentDto createEnrollment(Integer userId, Integer activityId, EnrollmentDto enrollmentDto) {
         if (userId == null) throw new HEException(USER_NOT_FOUND);
-        Volunteer volunteer = (Volunteer) userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
+        Volunteer volunteer = (Volunteer) userRepository.findById(userId).orElseThrow(() ->
+                new HEException(USER_NOT_FOUND, userId));
 
         if (activityId == null) throw new HEException(ACTIVITY_NOT_FOUND);
-        Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
+        Activity activity = activityRepository.findById(activityId).orElseThrow(() ->
+                new HEException(ACTIVITY_NOT_FOUND, activityId));
 
         Enrollment enrollment = new Enrollment(activity, volunteer, enrollmentDto);
 
