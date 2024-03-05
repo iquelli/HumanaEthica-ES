@@ -2,11 +2,8 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto;
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
-
-import java.util.List;
 
 public class ParticipationDto {
     private Integer id;
@@ -18,8 +15,7 @@ public class ParticipationDto {
     public ParticipationDto(){
     }
 
-    // TODO: need deep copy for activity like the one used in ActivityDto ?
-    public ParticipationDto(Participation participation){
+    public ParticipationDto(Participation participation, boolean deepCopyVolunteer, boolean deepCopyActivity){
         setId(participation.getId());
         setRating(participation.getRating());
         setVolunteer(new UserDto(participation.getVolunteer()));
@@ -27,11 +23,14 @@ public class ParticipationDto {
 
         setAcceptanceDate(DateHandler.toISOString(participation.getAcceptanceDate()));
 
-        /* TODO uncomment if deep copy is needed
         if (deepCopyActivity && (participation.getActivity() != null)) {
             setActivity(new ActivityDto(participation.getActivity(), false));
         }
-         */
+
+        if (deepCopyVolunteer && (participation.getActivity() != null)) {
+            setVolunteer(new UserDto(participation.getVolunteer()));
+        }
+
     }
 
 
