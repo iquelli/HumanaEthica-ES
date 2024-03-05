@@ -3,8 +3,10 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.webservice
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
@@ -73,6 +75,50 @@ class CreateParticipationWebServiceIT extends SpockTest {
         participationRepository.count() == 1
         def participation = participationRepository.findAll().get(0)
         participation.getRating() == RATING_1
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as volunteer, and create a participation"() {
+        given:
+        demoVolunteerLogin()
+
+        when:
+        def response = webClient.post()
+                .uri('/participations/'+ activityId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(participationDto)
+                .retrieve()
+                .bodyToMono(ParticipationDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+        participationRepository.count() == 0
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as admin, and create a participation"() {
+        given:
+        demoAdminLogin()
+
+        when:
+        def response = webClient.post()
+                .uri('/participations/'+ activityId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(participationDto)
+                .retrieve()
+                .bodyToMono(ParticipationDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+        participationRepository.count() == 0
 
         cleanup:
         deleteAll()
