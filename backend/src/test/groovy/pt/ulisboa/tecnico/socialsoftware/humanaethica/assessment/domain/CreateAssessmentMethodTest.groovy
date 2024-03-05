@@ -10,10 +10,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentD
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler
 import spock.lang.Unroll
 
-import java.time.LocalDateTime
 
 @DataJpaTest
 class CreateAssessmentMethodTest extends SpockTest {
@@ -57,6 +55,7 @@ class CreateAssessmentMethodTest extends SpockTest {
         1 * institution.addAssessment(_)
     }
 
+    @Unroll
     def "create assessment and violate review cannot have less than 10 characters"() {
         given:
         activity.getEndingDate() >> TWO_DAYS_AGO
@@ -79,6 +78,7 @@ class CreateAssessmentMethodTest extends SpockTest {
         review << [null, "", " ", "123456789", "review"]
     }
 
+    @Unroll
     def "create assessment and violate institution must have a completed activity"() {
         given:
         activity.getEndingDate() >> IN_TWO_DAYS
@@ -98,6 +98,7 @@ class CreateAssessmentMethodTest extends SpockTest {
         error.getErrorMessage() == ErrorMessage.ASSESSMENT_INSTITUTION_WITHOUT_COMPLETED_ACTIVITY
     }
 
+    @Unroll
     def "create assessment and violate volunteer can only evaluate an institution once"() {
         given:
         activity.getEndingDate() >> TWO_DAYS_AGO

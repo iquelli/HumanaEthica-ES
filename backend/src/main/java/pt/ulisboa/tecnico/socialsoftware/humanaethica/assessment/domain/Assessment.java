@@ -100,7 +100,7 @@ public class Assessment {
     }
 
     private void institutionHasCompletedActivity() {
-        if (this.institution == null || !this.institution.getActivities()
+        if (!this.institution.getActivities()
                 .stream()
                 .anyMatch(a -> a.getEndingDate().isBefore(this.reviewDate))) {
             throw new HEException(ASSESSMENT_INSTITUTION_WITHOUT_COMPLETED_ACTIVITY, this.institution.getName());
@@ -108,7 +108,7 @@ public class Assessment {
     }
 
     private void volunteerHasNotAssessedInstituition() {
-        if (this.volunteer == null || this.institution.getAssessments()
+        if (this.institution.getAssessments()
                 .stream()
                 .anyMatch(a -> a != this && a.getVolunteer().getName()
                 .equals(this.volunteer.getName()))) {
