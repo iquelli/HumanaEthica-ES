@@ -69,7 +69,7 @@ class CreateParticipationMethodTest extends SpockTest {
         error.getErrorMessage() == ErrorMessage.PARTICIPATION_LIMIT_REACHED
 
         where:
-        participantsLimit << [-1, 0, 1] // TODO: is null suppose to work?
+        participantsLimit << [-1, 0, 1]
     }
 
     @Unroll
