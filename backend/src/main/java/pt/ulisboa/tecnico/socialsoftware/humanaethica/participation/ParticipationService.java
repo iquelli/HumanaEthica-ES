@@ -15,6 +15,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 
+import java.util.List;
+
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
 
 @Service
@@ -46,4 +48,16 @@ public class ParticipationService {
 
         return new ParticipationDto(participation, true, true);
     }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<ParticipationDto> getParticipationsByActivity(Integer activityId) {
+        if (activityId == null) throw new HEException(ACTIVITY_NOT_FOUND);
+        activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
+
+        return participationRepository.getParticipationByActivityId(activityId).stream()
+                .map(participation-> new ParticipationDto(participation, true, true))
+                .toList();
+    }
+
+
 }

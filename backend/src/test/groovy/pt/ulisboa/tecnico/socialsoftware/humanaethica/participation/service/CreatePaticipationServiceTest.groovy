@@ -27,7 +27,7 @@ class CreateParticipationServiceTest extends SpockTest{
 
     def setup() {
 
-        volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.DEMO, User.State.SUBMITTED)
         userRepository.save(volunteer)
 
         def institution = institutionService.getDemoInstitution()
