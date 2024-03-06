@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser;
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
 
 import java.security.Principal;
 import java.util.List;
@@ -27,7 +26,7 @@ public class AssessmentController {
         return assessmentService.createAssessment(userId, institutionId, assessmentDto);
     }
 
-    @PutMapping("/{institutionId}")
+    @GetMapping("/{institutionId}")
     public List<AssessmentDto> getAssessmentsByInstitution(@PathVariable int institutionId) {
         return assessmentService.getAssessmentsByInstitution(institutionId);
     }
