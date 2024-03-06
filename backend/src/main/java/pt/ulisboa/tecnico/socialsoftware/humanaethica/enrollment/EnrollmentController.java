@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -27,4 +28,11 @@ public class EnrollmentController {
         int userId = ((AuthUser) ((Authentication) principal).getPrincipal()).getUser().getId();
         return enrollmentService.createEnrollment(userId, activityId, enrollmentDto);
     }
+
+    @GetMapping("/{activityId}")
+    @PreAuthorize("hasRole('ROLE_MEMBER') and hasPermission(#activityId, 'ACTIVITY.MEMBER')")
+    public List<EnrollmentDto> getActivityEnrollments(@PathVariable int activityId){
+        return enrollmentService.getEnrollmentsByActivity(activityId);
+    }
+
 }
