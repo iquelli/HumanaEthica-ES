@@ -42,7 +42,7 @@ public class ActivityDto {
         setApplicationDeadline(DateHandler.toISOString(activity.getApplicationDeadline()));
 
         if (deepCopyInstitution && (activity.getInstitution() != null)) {
-                setInstitution(new InstitutionDto(activity.getInstitution(), false, false));
+                setInstitution(new InstitutionDto(activity.getInstitution(), false, false, false));
 
         }
     }

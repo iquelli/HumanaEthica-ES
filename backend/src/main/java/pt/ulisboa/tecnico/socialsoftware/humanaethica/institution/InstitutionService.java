@@ -57,7 +57,7 @@ public class InstitutionService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public List<InstitutionDto> getInstitutions() {
         return institutionRepository.findAll().stream()
-                .map(institution-> new InstitutionDto(institution,true,true))
+                .map(institution-> new InstitutionDto(institution,true,true,true))
                 .sorted(Comparator.comparing(InstitutionDto::getName))
                 .toList();
     }

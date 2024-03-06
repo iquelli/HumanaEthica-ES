@@ -34,7 +34,7 @@ public class ThemeDto {
         //setActivities(activities);
         if (deepCopyInstitutions) {
             this.institutions = theme.getInstitutions().stream()
-                    .map(institution-> new InstitutionDto(institution,false, false))
+                    .map(institution-> new InstitutionDto(institution,false, false, false))
                     .toList();
         }
         setState(theme.getState().toString());

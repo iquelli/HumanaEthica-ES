@@ -41,7 +41,8 @@ public class InstitutionDto {
         setCreationDate(DateHandler.toISOString(institution.getCreationDate()));
     }
 
-    public InstitutionDto(Institution institution, boolean deepCopyThemes, boolean deepCopyActivities){
+    public InstitutionDto(Institution institution, boolean deepCopyThemes, boolean deepCopyActivities,
+                        boolean deepCopyAssessments) {
         setId(institution.getId());
         setEmail(institution.getEmail());
         setName(institution.getName());
@@ -57,6 +58,11 @@ public class InstitutionDto {
             this.activityDto = institution.getActivities().stream()
                     .map(activity-> new ActivityDto(activity,false))
                     .toList();
+        }
+        if (deepCopyAssessments && institution.getAssessments() != null) {
+            setAssessments(institution.getAssessments().stream()
+                            .map(assessment -> new AssessmentDto(assessment, false, false))
+                            .toList());
         }
     }
 
