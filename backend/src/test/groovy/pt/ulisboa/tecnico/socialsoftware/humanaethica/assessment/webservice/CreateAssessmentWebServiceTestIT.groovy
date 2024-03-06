@@ -13,6 +13,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentD
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CreateAssessmentWebServiceTestIT extends SpockTest {
+
     @LocalServerPort
     private int port
 
@@ -29,7 +30,7 @@ class CreateAssessmentWebServiceTestIT extends SpockTest {
         def institution = institutionService.getDemoInstitution()
 
         // add completed activity to institution
-        def themesDto = new ArrayList<>()
+        def themesDto = []
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
                 THREE_DAYS_AGO,TWO_DAYS_AGO, ONE_DAY_AGO,themesDto)
         def activity = new Activity(activityDto, institution, [] )
@@ -113,6 +114,5 @@ class CreateAssessmentWebServiceTestIT extends SpockTest {
         cleanup:
         deleteAll()
     }
-
 
 }

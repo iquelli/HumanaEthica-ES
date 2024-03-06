@@ -15,6 +15,7 @@ import spock.lang.Unroll
 
 @DataJpaTest
 class CreateAssessmentMethodTest extends SpockTest {
+
     Institution institution = Mock()
     Activity activity = Mock()
     Volunteer volunteer = Mock()
@@ -122,4 +123,5 @@ class CreateAssessmentMethodTest extends SpockTest {
 
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
+
 }

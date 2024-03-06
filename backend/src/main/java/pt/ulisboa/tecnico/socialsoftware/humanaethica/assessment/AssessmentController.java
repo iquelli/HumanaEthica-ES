@@ -6,8 +6,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser;
 
 import java.security.Principal;
@@ -18,8 +16,6 @@ public class AssessmentController {
 
     @Autowired
     private AssessmentService assessmentService;
-
-    private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
     @PostMapping("/{institutionId}")
     @PreAuthorize("(hasRole('ROLE_VOLUNTEER'))") 

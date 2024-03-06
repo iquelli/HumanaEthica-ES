@@ -33,13 +33,6 @@ public class HEPermissionEvaluator implements PermissionEvaluator {
                     Activity activity = activityRepository.findById(id).orElse(null);
                     if (activity == null) return false;
                     return activity.getInstitution().getId().equals(((Member)authUser.getUser()).getInstitution().getId());
-                case "INSTITUTION.MEMBER":
-                    Institution institution = institutionRepository.findById(id).orElse(null);
-                    if (institution == null) return false;
-                    return institution.getMembers()
-                                    .stream()
-                                    .anyMatch(member -> member.getId()
-                                    .equals(((Member)authUser.getUser()).getId()));
                 default:
                     return false;
             }

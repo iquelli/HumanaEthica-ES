@@ -27,7 +27,7 @@ public class InstitutionDto {
 
     private List<ActivityDto> activityDto = new ArrayList<>();
 
-    private List<AssessmentDto> assessmentDto = new ArrayList<>();
+    private List<AssessmentDto> assessmentsDto = new ArrayList<>();
 
     public InstitutionDto(){
     }
@@ -130,11 +130,11 @@ public class InstitutionDto {
         this.activityDto = activityDto;
     }
 
-    public List<AssessmentDto>getAssessments() {
-        return assessmentDto;
+    public List<AssessmentDto> getAssessments() {
+        return assessmentsDto;
     }
 
-    public void setAssessments(List<AssessmentDto> assessmentDto) {
-        this.assessmentDto = assessmentDto;
+    public void setAssessments(List<AssessmentDto> assessmentsDto) {
+        this.assessmentsDto = assessmentsDto;
     }
 }
