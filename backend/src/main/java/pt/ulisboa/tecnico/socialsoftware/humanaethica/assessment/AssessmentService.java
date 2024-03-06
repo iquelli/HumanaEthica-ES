@@ -16,6 +16,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
 
+import java.util.List;
+
 @Service
 public class AssessmentService {
 
@@ -44,6 +46,19 @@ public class AssessmentService {
 
         assessmentRepository.save(assessment);
         return new AssessmentDto(assessment, true, true);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<AssessmentDto> getAssessmentsByInstitution(Integer institutionId) {
+        if (institutionId == null) {
+            throw new HEException(INSTITUTION_NOT_FOUND);
+        }
+        Institution institution = (Institution) institutionRepository.findById(institutionId)
+                .orElseThrow(() -> new HEException(INSTITUTION_NOT_FOUND, institutionId));
+
+        return institution.getAssessments().stream()
+                .map(assessment -> new AssessmentDto(assessment, true, true))
+                .toList();
     }
 
 }
