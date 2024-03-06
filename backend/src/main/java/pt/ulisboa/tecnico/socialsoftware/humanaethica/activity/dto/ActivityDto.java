@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto;
 
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.dto.InstitutionDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
@@ -20,6 +21,7 @@ public class ActivityDto {
     private String creationDate;
     private List<ThemeDto> themes;
     private InstitutionDto institution;
+    private List<ParticipationDto> participations;
 
     public ActivityDto(){
     }
@@ -53,6 +55,14 @@ public class ActivityDto {
 
     public List<ThemeDto> getThemes() {
         return themes;
+    }
+
+    public void setParticipations(List<ParticipationDto> participations) {
+        this.participations = participations;
+    }
+
+    public List<ParticipationDto> getParticipations() {
+        return participations;
     }
 
     public Integer getId() {
