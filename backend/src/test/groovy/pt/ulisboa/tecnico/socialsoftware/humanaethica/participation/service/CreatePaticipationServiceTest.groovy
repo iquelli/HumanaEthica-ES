@@ -33,7 +33,7 @@ class CreateParticipationServiceTest extends SpockTest{
         def institution = institutionService.getDemoInstitution()
 
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
-                THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,null)
+                THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,[])
 
         activity = new Activity(activityDto, institution, [])
         activityRepository.save(activity)
