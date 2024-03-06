@@ -102,8 +102,11 @@ class CreateParticipationServiceTest extends SpockTest{
     def getVolunteerDto(volunteerDto){
         if (volunteerDto == EXIST)
             return new UserDto(volunteer.getAuthUser())
-        else if (volunteerDto == NO_EXIST)
-            return null
+        else if (volunteerDto == NO_EXIST) {
+            def temp = new UserDto(volunteer.getAuthUser())
+            temp.setId(222)
+            return temp
+        }
         return null
     }
 
