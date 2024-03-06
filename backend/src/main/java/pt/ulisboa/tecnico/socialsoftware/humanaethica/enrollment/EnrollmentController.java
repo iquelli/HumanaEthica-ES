@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment;
 
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,8 +16,6 @@ import java.util.List;
 public class EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
-
-    private static final Logger logger = LoggerFactory.getLogger(EnrollmentController.class);
 
     @PostMapping("/{activityId}")
     @PreAuthorize("(hasRole('ROLE_VOLUNTEER'))")
