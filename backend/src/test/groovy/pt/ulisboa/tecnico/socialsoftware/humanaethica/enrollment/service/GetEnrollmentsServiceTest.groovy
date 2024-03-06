@@ -9,6 +9,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.domain.Enrollment
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
+import spock.lang.Unroll
 
 @DataJpaTest
 class GetEnrollmentsServiceTest extends SpockTest {
@@ -50,6 +53,19 @@ class GetEnrollmentsServiceTest extends SpockTest {
         result.size() == 2
         result.get(0).motivation == ENROLLMENT_MOTIVATION_1
         result.get(1).motivation == ENROLLMENT_MOTIVATION_2
+    }
+
+    @Unroll
+    def "invalid arguments: activityId=#activityId"() {
+        when:
+        enrollmentService.getEnrollmentsByActivity(activityId)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == ErrorMessage.ACTIVITY_NOT_FOUND
+
+        where:
+        activityId << [null, 222]
     }
 
     @TestConfiguration
