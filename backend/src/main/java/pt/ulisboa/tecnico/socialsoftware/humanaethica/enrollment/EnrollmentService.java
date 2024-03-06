@@ -14,6 +14,8 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.repository.UserRepository;
 
+import java.util.List;
+
 import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage.*;
 
 @Service
@@ -41,4 +43,15 @@ public class EnrollmentService {
 
         return new EnrollmentDto(enrollment, true, true);
     }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<EnrollmentDto> getEnrollmentsByActivity(Integer activityId) {
+        if (activityId == null) throw new HEException(ACTIVITY_NOT_FOUND);
+        activityRepository.findById(activityId).orElseThrow(() -> new HEException(ACTIVITY_NOT_FOUND, activityId));
+
+        return enrollmentRepository.getEnrollmentsByActivityId(activityId).stream()
+                .map(enrollment-> new EnrollmentDto(enrollment, true, true))
+                .toList();
+    }
+
 }
