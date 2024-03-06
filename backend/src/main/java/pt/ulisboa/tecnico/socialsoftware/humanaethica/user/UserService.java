@@ -203,7 +203,7 @@ public class UserService {
         AuthUser authUser = authUserRepository.findById(userId).orElseThrow(() -> new HEException(ErrorMessage.AUTHUSER_NOT_FOUND));
         Member member = (Member) authUser.getUser();
 
-        return new InstitutionDto(member.getInstitution(), true, true);
+        return new InstitutionDto(member.getInstitution(), true, true, true);
     }
 
 }
