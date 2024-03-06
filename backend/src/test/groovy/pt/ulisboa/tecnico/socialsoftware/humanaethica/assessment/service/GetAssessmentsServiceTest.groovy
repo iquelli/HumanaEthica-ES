@@ -10,6 +10,9 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
+import spock.lang.Unroll
 
 @DataJpaTest
 class GetAssessmentsServiceTest extends SpockTest {
@@ -52,6 +55,20 @@ class GetAssessmentsServiceTest extends SpockTest {
         result.get(1).review == ASSESSMENT_REVIEW_2
         result.get(1).volunteer.getName() == USER_2_NAME
     }
+
+    @Unroll
+    def "invalid arguments: institutionId=#institutionId"() {
+        when:
+        assessmentService.getAssessmentsByInstitution(institutionId)
+
+        then:
+        def error = thrown(HEException)
+        error.getErrorMessage() == ErrorMessage.INSTITUTION_NOT_FOUND
+
+        where:
+        institutionId << [null, 222]
+    }
+
 
     @TestConfiguration
     static class LocalBeanConfiguration extends BeanConfiguration {}
