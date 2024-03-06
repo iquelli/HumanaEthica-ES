@@ -22,7 +22,7 @@ public class ParticipationDto {
         setAcceptanceDate(DateHandler.toISOString(participation.getAcceptanceDate()));
 
         if (deepCopyActivity && (participation.getActivity() != null)) {
-            setActivity(new ActivityDto(participation.getActivity(), false, false));
+            setActivity(new ActivityDto(participation.getActivity(), false, false, false));
         }
 
         if (deepCopyVolunteer && (participation.getActivity() != null)) {

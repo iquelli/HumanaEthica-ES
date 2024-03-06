@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.dto.InstitutionDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto;
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.dto.ThemeDto;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.utils.DateHandler;
 
@@ -22,11 +23,13 @@ public class ActivityDto {
     private List<ThemeDto> themes;
     private InstitutionDto institution;
     private List<ParticipationDto> participations;
+    private List<EnrollmentDto> enrollments;
 
     public ActivityDto(){
     }
 
-    public ActivityDto(Activity activity, boolean deepCopyInstitution, boolean deepCopyParticipations){
+    public ActivityDto(Activity activity, boolean deepCopyInstitution, boolean deepCopyParticipations,
+                       boolean deepCopyEnrollments){
         setId(activity.getId());
         setName(activity.getName());
         setRegion(activity.getRegion());
@@ -44,8 +47,7 @@ public class ActivityDto {
         setApplicationDeadline(DateHandler.toISOString(activity.getApplicationDeadline()));
 
         if (deepCopyInstitution && (activity.getInstitution() != null)) {
-                setInstitution(new InstitutionDto(activity.getInstitution(), false, false, false));
-
+            setInstitution(new InstitutionDto(activity.getInstitution(), false, false, false));
         }
 
         if (deepCopyParticipations && activity.getParticipations() != null) {
@@ -54,6 +56,11 @@ public class ActivityDto {
                     .toList());
         }
 
+        if (deepCopyEnrollments && activity.getEnrollments() != null) {
+            setEnrollments(activity.getEnrollments().stream()
+                    .map(enrollment -> new EnrollmentDto(enrollment, false, false))
+                    .toList());
+        }
 
     }
 
@@ -71,6 +78,14 @@ public class ActivityDto {
 
     public List<ParticipationDto> getParticipations() {
         return participations;
+    }
+
+    public List<EnrollmentDto> getEnrollments() {
+        return this.enrollments;
+    }
+
+    public void setEnrollments(List<EnrollmentDto> enrollments) {
+        this.enrollments = enrollments;
     }
 
     public Integer getId() {
