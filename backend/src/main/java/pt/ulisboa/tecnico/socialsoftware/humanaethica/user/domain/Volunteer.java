@@ -20,11 +20,11 @@ public class Volunteer extends User {
     @OneToMany(mappedBy = "volunteer", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Enrollment> enrollments = new ArrayList<>();
 
-    public Volunteer() {
-    }
-
     @OneToMany(mappedBy = "volunteer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Participation> participations = new ArrayList<>();
+
+    public Volunteer() {
+    }
 
     public Volunteer(String name, String username, String email, AuthUser.Type type, State state) {
         super(name, username, email, Role.VOLUNTEER, type, state);

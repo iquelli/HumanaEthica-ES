@@ -38,12 +38,10 @@ class CreateParticipationWebServiceIT extends SpockTest {
 
         def institution = institutionService.getDemoInstitution()
 
-        def themesDto = new ArrayList<>()
-
         def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
-                THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,themesDto)
+                THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,null)
 
-        def activity = new Activity(activityDto, institution, [] )
+        def activity = new Activity(activityDto, institution, [])
         activityRepository.save(activity)
 
         activityId = activity.id

@@ -17,8 +17,8 @@ class CreateParticipationMethodTest extends SpockTest {
     Activity otherActivity = Mock()
     Volunteer volunteer = Mock()
     Participation otherParticipation = Mock()
-    Participation otherParticipation_2 = Mock()
-    Participation otherParticipation_3 = Mock()
+    Participation otherParticipation2 = Mock()
+    Participation otherParticipation3 = Mock()
 
     def participationDto
 
@@ -34,8 +34,8 @@ class CreateParticipationMethodTest extends SpockTest {
         activity.getApplicationDeadline() >> ONE_DAY_AGO
         activity.getParticipantsNumberLimit() >> 2
         activity.getParticipations() >> [otherParticipation]
-        volunteer.getParticipations() >> [otherParticipation_2]
-        otherParticipation_2.getActivity() >> otherActivity
+        volunteer.getParticipations() >> [otherParticipation2]
+        otherParticipation2.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
 
         when:
@@ -56,9 +56,9 @@ class CreateParticipationMethodTest extends SpockTest {
         activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
         activity.getParticipantsNumberLimit() >> participantsLimit
-        activity.getParticipations() >> [otherParticipation, otherParticipation_2]
-        volunteer.getParticipations() >> [otherParticipation_3]
-        otherParticipation_3.getActivity() >> otherActivity
+        activity.getParticipations() >> [otherParticipation, otherParticipation2]
+        volunteer.getParticipations() >> [otherParticipation3]
+        otherParticipation3.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
 
         when:
@@ -78,7 +78,7 @@ class CreateParticipationMethodTest extends SpockTest {
         activity.getName() >> ACTIVITY_NAME_1
         activity.getApplicationDeadline() >> ONE_DAY_AGO
         activity.getParticipantsNumberLimit() >> 5
-        activity.getParticipations() >> [otherParticipation, otherParticipation_2]
+        activity.getParticipations() >> [otherParticipation, otherParticipation2]
         volunteer.getParticipations() >> [otherParticipation]
         otherParticipation.getActivity() >> activity
 
@@ -97,8 +97,8 @@ class CreateParticipationMethodTest extends SpockTest {
         activity.getApplicationDeadline() >> IN_ONE_DAY
         activity.getParticipantsNumberLimit() >> 2
         activity.getParticipations() >> [otherParticipation]
-        volunteer.getParticipations() >> [otherParticipation_2]
-        otherParticipation_2.getActivity() >> otherActivity
+        volunteer.getParticipations() >> [otherParticipation2]
+        otherParticipation2.getActivity() >> otherActivity
         otherActivity.getName() >> ACTIVITY_NAME_2
 
         when:

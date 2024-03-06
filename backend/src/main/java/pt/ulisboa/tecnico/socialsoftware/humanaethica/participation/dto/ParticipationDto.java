@@ -18,13 +18,11 @@ public class ParticipationDto {
     public ParticipationDto(Participation participation, boolean deepCopyVolunteer, boolean deepCopyActivity){
         setId(participation.getId());
         setRating(participation.getRating());
-        setVolunteer(new UserDto(participation.getVolunteer()));
-        setActivity(new ActivityDto(participation.getActivity(), false));
 
         setAcceptanceDate(DateHandler.toISOString(participation.getAcceptanceDate()));
 
         if (deepCopyActivity && (participation.getActivity() != null)) {
-            setActivity(new ActivityDto(participation.getActivity(), false));
+            setActivity(new ActivityDto(participation.getActivity(), false, false));
         }
 
         if (deepCopyVolunteer && (participation.getActivity() != null)) {
@@ -32,7 +30,6 @@ public class ParticipationDto {
         }
 
     }
-
 
     public Integer getId() {
         return id;

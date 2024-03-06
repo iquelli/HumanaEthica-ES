@@ -37,7 +37,7 @@ public class ActivityService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public List<ActivityDto> getActivities() {
         return activityRepository.findAll().stream()
-                .map(activity-> new ActivityDto(activity,true))
+                .map(activity-> new ActivityDto(activity,true,true))
                 .sorted(Comparator.comparing(ActivityDto::getName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
     }
@@ -54,7 +54,7 @@ public class ActivityService {
 
         activityRepository.save(activity);
 
-        return new ActivityDto(activity, true);
+        return new ActivityDto(activity, true, true);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -66,7 +66,7 @@ public class ActivityService {
 
         activity.update(activityDto, themes);
 
-        return new ActivityDto(activity, false);
+        return new ActivityDto(activity, false, false);
     }
 
     private List<Theme> getThemes(ActivityDto activityDto) {
@@ -87,7 +87,7 @@ public class ActivityService {
 
         activity.suspend();
 
-        return new ActivityDto(activity, true);
+        return new ActivityDto(activity, true, true);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -97,7 +97,7 @@ public class ActivityService {
 
         activity.report();
 
-        return new ActivityDto(activity, false);
+        return new ActivityDto(activity, false, false);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -107,7 +107,7 @@ public class ActivityService {
 
         activity.validate();
 
-        return new ActivityDto(activity, true);
+        return new ActivityDto(activity, true, true);
     }
 
 }

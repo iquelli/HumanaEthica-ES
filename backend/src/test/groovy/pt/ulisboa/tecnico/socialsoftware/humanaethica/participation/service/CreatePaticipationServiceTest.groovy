@@ -24,28 +24,18 @@ class CreateParticipationServiceTest extends SpockTest{
 
     def volunteer
     def activity
-    def institution
-    def theme
-    def themesDto
-    def activityDto
 
     def setup() {
 
         volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
         userRepository.save(volunteer)
 
-        institution = institutionService.getDemoInstitution()
+        def institution = institutionService.getDemoInstitution()
 
-        theme = new Theme(THEME_NAME_1, Theme.State.APPROVED,null)
-        themeRepository.save(theme)
+        def activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
+                THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,null)
 
-        themesDto = new ArrayList<>()
-        themesDto.add(new ThemeDto(theme,false,false,false))
-
-        activityDto = createActivityDto(ACTIVITY_NAME_1,ACTIVITY_REGION_1,1,ACTIVITY_DESCRIPTION_1,
-                THREE_DAYS_AGO,TWO_DAYS_AGO,ONE_DAY_AGO,themesDto)
-
-        activity = new Activity(activityDto, institution, [theme] )
+        activity = new Activity(activityDto, institution, [])
         activityRepository.save(activity)
     }
 

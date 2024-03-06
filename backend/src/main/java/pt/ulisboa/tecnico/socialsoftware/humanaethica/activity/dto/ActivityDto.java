@@ -26,7 +26,7 @@ public class ActivityDto {
     public ActivityDto(){
     }
 
-    public ActivityDto(Activity activity, boolean deepCopyInstitution){
+    public ActivityDto(Activity activity, boolean deepCopyInstitution, boolean deepCopyParticipations){
         setId(activity.getId());
         setName(activity.getName());
         setRegion(activity.getRegion());
@@ -47,6 +47,14 @@ public class ActivityDto {
                 setInstitution(new InstitutionDto(activity.getInstitution(), false, false));
 
         }
+
+        if (deepCopyParticipations && activity.getParticipations() != null) {
+            setParticipations(activity.getParticipations().stream()
+                    .map(participation -> new ParticipationDto(participation, false, false))
+                    .toList());
+        }
+
+
     }
 
     public void setThemes(List<ThemeDto> themes) {
@@ -84,7 +92,6 @@ public class ActivityDto {
     public String getRegion() { return region; }
 
     public void setRegion(String region) { this.region = region; }
-
 
     public String getDescription() {
         return description;

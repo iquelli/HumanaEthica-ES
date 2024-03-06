@@ -81,7 +81,7 @@ public class Participation {
 
     private void verifyInvariants() {
         numberOfParticipantsBelowLimit();
-        participatesInActivityOnce();
+        participatesInActivityOnlyOnce();
         participationAfterApplicationDeadline();
     }
 
@@ -91,7 +91,7 @@ public class Participation {
        }
     }
 
-    private void participatesInActivityOnce(){
+    private void participatesInActivityOnlyOnce(){
         boolean isParticipant = volunteer.getParticipations().stream().
                 anyMatch(participation -> participation != this && participation.getActivity().getName().equals(activity.getName()));
         if (isParticipant){
