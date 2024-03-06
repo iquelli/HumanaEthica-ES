@@ -57,10 +57,10 @@ class CreateParticipationWebServiceIT extends SpockTest {
     }
 
     def "login as member, and create a participation"() {
-        given:
+        given: 'a member'
         demoMemberLogin()
 
-        when:
+        when: 'the member creates the participation'
         def response = webClient.post()
                 .uri('/participations/'+ activityId)
                 .headers(httpHeaders -> httpHeaders.putAll(headers))
@@ -80,11 +80,35 @@ class CreateParticipationWebServiceIT extends SpockTest {
         deleteAll()
     }
 
+    def "login as member, and create a participation with error"() {
+        given: 'a member'
+        demoMemberLogin()
+        and: 'a null volunteer'
+        participationDto.setVolunteer(null)
+
+        when: 'the member creates the participation'
+        webClient.post()
+                .uri('/participations/'+ activityId)
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .bodyValue(participationDto)
+                .retrieve()
+                .bodyToMono(ParticipationDto.class)
+                .block()
+
+        then: "an error is returned"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.BAD_REQUEST
+        participationRepository.count() == 0
+
+        cleanup:
+        deleteAll()
+    }
+
     def "login as volunteer, and create a participation"() {
-        given:
+        given: 'a volunteer'
         demoVolunteerLogin()
 
-        when:
+        when: 'the volunteer creates the participation'
         webClient.post()
                 .uri('/participations/'+ activityId)
                 .headers(httpHeaders -> httpHeaders.putAll(headers))
@@ -103,10 +127,10 @@ class CreateParticipationWebServiceIT extends SpockTest {
     }
 
     def "login as admin, and create a participation"() {
-        given:
+        given: 'an admin'
         demoAdminLogin()
 
-        when:
+        when: 'the admin creates the participation'
         webClient.post()
                 .uri('/participations/'+ activityId)
                 .headers(httpHeaders -> httpHeaders.putAll(headers))
