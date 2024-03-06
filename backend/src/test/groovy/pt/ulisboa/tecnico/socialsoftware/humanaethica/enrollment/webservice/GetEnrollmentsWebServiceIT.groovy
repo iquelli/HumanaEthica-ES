@@ -13,7 +13,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.enrollment.dto.EnrollmentD
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class GetEnrollmentWebServiceIT extends SpockTest {
+class GetEnrollmentsWebServiceIT extends SpockTest {
     @LocalServerPort
     private int port
 
