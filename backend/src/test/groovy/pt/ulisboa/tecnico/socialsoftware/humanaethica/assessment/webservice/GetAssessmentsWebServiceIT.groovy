@@ -10,6 +10,7 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.domain.Assessment
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.assessment.dto.AssessmentDto
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -56,8 +57,105 @@ class GetAssessmentsWebServiceIT extends SpockTest {
     }
 
     def "get assessments"() {
+        when:
+        def response = webClient.get()
+                        .uri('/assessments/' + institution.getId())
+                        .headers(httpHeaders -> httpHeaders.putAll(headers))
+                        .retrieve()
+                        .bodyToFlux(AssessmentDto.class)
+                        .collectList()
+                        .block()
+
+        then: "check response"
+        response.size() == 2
+        response.get(0).review == ASSESSMENT_REVIEW_1
+        response.get(0).volunteer.name == USER_1_NAME
+        response.get(1).review == ASSESSMENT_REVIEW_2
+        response.get(1).volunteer.name == USER_2_NAME
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "get assessments while logged in as a member"() {
         given: "a member"
         demoMemberLogin()
+
+        when:
+        def response = webClient.get()
+                        .uri('/assessments/' + institution.getId())
+                        .headers(httpHeaders -> httpHeaders.putAll(headers))
+                        .retrieve()
+                        .bodyToFlux(AssessmentDto.class)
+                        .collectList()
+                        .block()
+
+        then: "check response"
+        response.size() == 2
+        response.get(0).review == ASSESSMENT_REVIEW_1
+        response.get(0).volunteer.name == USER_1_NAME
+        response.get(1).review == ASSESSMENT_REVIEW_2
+        response.get(1).volunteer.name == USER_2_NAME
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "get assessments while logged in as a member of another institution"() {
+        given: "a member of another institution"
+        def otherInstitution = new Institution(INSTITUTION_1_NAME, INSTITUTION_1_EMAIL, INSTITUTION_1_NIF)
+        institutionRepository.save(otherInstitution)
+        def otherMember = createMember(USER_3_NAME, USER_3_USERNAME, USER_3_PASSWORD, USER_3_EMAIL,
+                                        AuthUser.Type.NORMAL, otherInstitution, User.State.APPROVED)
+        normalUserLogin(USER_3_USERNAME, USER_3_PASSWORD)
+
+        when:
+        def response = webClient.get()
+                        .uri('/assessments/' + institution.getId())
+                        .headers(httpHeaders -> httpHeaders.putAll(headers))
+                        .retrieve()
+                        .bodyToFlux(AssessmentDto.class)
+                        .collectList()
+                        .block()
+
+        then: "check response"
+        response.size() == 2
+        response.get(0).review == ASSESSMENT_REVIEW_1
+        response.get(0).volunteer.name == USER_1_NAME
+        response.get(1).review == ASSESSMENT_REVIEW_2
+        response.get(1).volunteer.name == USER_2_NAME
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "get assessments while logged in as a volunteer"() {
+        given: "a volunteer"
+        demoVolunteerLogin()
+
+        when:
+        def response = webClient.get()
+                        .uri('/assessments/' + institution.getId())
+                        .headers(httpHeaders -> httpHeaders.putAll(headers))
+                        .retrieve()
+                        .bodyToFlux(AssessmentDto.class)
+                        .collectList()
+                        .block()
+
+        then: "check response"
+        response.size() == 2
+        response.get(0).review == ASSESSMENT_REVIEW_1
+        response.get(0).volunteer.name == USER_1_NAME
+        response.get(1).review == ASSESSMENT_REVIEW_2
+        response.get(1).volunteer.name == USER_2_NAME
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "get assessments while logged in as an admin"() {
+        given: "an admin"
+        demoAdminLogin()
 
         when:
         def response = webClient.get()
