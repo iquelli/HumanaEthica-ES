@@ -17,7 +17,9 @@ import spock.lang.Unroll
 @DataJpaTest
 class GetAssessmentsServiceTest extends SpockTest {
 
+    public static final int INEXISTENT_INSTITUTION_ID = 222
     def institution
+
 
     def setup() {
         institution = institutionService.getDemoInstitution()
@@ -66,7 +68,7 @@ class GetAssessmentsServiceTest extends SpockTest {
         error.getErrorMessage() == ErrorMessage.INSTITUTION_NOT_FOUND
 
         where:
-        institutionId << [null, 222]
+        institutionId << [null, INEXISTENT_INSTITUTION_ID]
     }
 
 
