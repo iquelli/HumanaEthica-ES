@@ -9,7 +9,6 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMessage
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.HEException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser
 import spock.lang.Unroll
@@ -25,8 +24,8 @@ class CreateParticipationServiceTest extends SpockTest{
 
     def setup() {
 
-        volunteer = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.DEMO, User.State.SUBMITTED)
-        userRepository.save(volunteer)
+        volunteer = createVolunteer(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, USER_1_EMAIL,
+                AuthUser.Type.DEMO, User.State.APPROVED)
 
         def institution = institutionService.getDemoInstitution()
 
@@ -41,7 +40,7 @@ class CreateParticipationServiceTest extends SpockTest{
         given: "a participation dto"
 
         def participationDto = new ParticipationDto()
-        def volunteerDto = new UserDto(volunteer.getAuthUser())
+        def volunteerDto = new UserDto(volunteer)
         participationDto.setRating(RATING_1)
         participationDto.setVolunteer(volunteerDto)
 
@@ -89,9 +88,9 @@ class CreateParticipationServiceTest extends SpockTest{
 
     def getVolunteerDto(volunteerDto){
         if (volunteerDto == EXIST)
-            return new UserDto(volunteer.getAuthUser())
+            return new UserDto(volunteer)
         else if (volunteerDto == NO_EXIST) {
-            def temp = new UserDto(volunteer.getAuthUser())
+            def temp = new UserDto(volunteer)
             temp.setId(222)
             return temp
         }

@@ -14,7 +14,6 @@ import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institu
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.User
-import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.domain.Volunteer
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.user.dto.UserDto
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,9 +32,11 @@ class GetParticipationsWebServiceIT extends SpockTest {
 
         demoMemberLogin()
 
-        def volunteer1 = new Volunteer(USER_1_NAME, USER_1_USERNAME, USER_1_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        def volunteer1 = createVolunteer(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, USER_1_EMAIL,
+                AuthUser.Type.DEMO, User.State.APPROVED)
         userRepository.save(volunteer1)
-        def volunteer2 = new Volunteer(USER_2_NAME, USER_2_USERNAME, USER_2_EMAIL, AuthUser.Type.NORMAL, User.State.SUBMITTED)
+        def volunteer2 = createVolunteer(USER_2_NAME, USER_2_USERNAME, USER_2_PASSWORD, USER_2_EMAIL,
+                AuthUser.Type.DEMO, User.State.APPROVED)
         userRepository.save(volunteer2)
 
         def volunteerDto1 = new UserDto(volunteer1.getAuthUser())
@@ -93,7 +94,7 @@ class GetParticipationsWebServiceIT extends SpockTest {
         deleteAll()
     }
 
-    def "login as member of another institution and get enrollments of activity"() {
+    def "login as member of another institution and get participations of activity"() {
         given: 'another member'
         def otherInstitution = new Institution(INSTITUTION_1_NAME, INSTITUTION_1_EMAIL, INSTITUTION_1_NIF)
         institutionRepository.save(otherInstitution)
