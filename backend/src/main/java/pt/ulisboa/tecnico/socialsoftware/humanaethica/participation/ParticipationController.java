@@ -6,6 +6,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/participations")
@@ -18,4 +20,11 @@ public class ParticipationController {
     public ParticipationDto createParticipation(@PathVariable Integer activityId, @Valid @RequestBody ParticipationDto participationDto) {
         return participationService.createParticipation(activityId, participationDto);
     }
+
+    @GetMapping("/{activityId}")
+    @PreAuthorize("hasRole('ROLE_MEMBER') and hasPermission(#activityId, 'ACTIVITY.MEMBER')")
+    public List<ParticipationDto> getActivityParticipations(@PathVariable int activityId){
+        return participationService.getParticipationsByActivity(activityId);
+    }
+
 }
