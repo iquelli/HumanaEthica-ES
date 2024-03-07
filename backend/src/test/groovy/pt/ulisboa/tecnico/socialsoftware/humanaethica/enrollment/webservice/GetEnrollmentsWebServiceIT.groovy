@@ -58,7 +58,7 @@ class GetEnrollmentsWebServiceIT extends SpockTest {
         enrollmentRepository.save(enrollment)
     }
 
-    def "get activities"() {
+    def "get enrollments"() {
         given: 'a member'
         demoMemberLogin()
 
@@ -82,7 +82,7 @@ class GetEnrollmentsWebServiceIT extends SpockTest {
         deleteAll()
     }
 
-    def "login as member of another institution and get activities"() {
+    def "login as member of another institution and get enrollments"() {
         given: 'another member'
         def otherInstitution = new Institution(INSTITUTION_1_NAME, INSTITUTION_1_EMAIL, INSTITUTION_1_NIF)
         institutionRepository.save(otherInstitution)
@@ -107,7 +107,7 @@ class GetEnrollmentsWebServiceIT extends SpockTest {
         deleteAll()
     }
 
-    def "login as volunteer, and get activities"() {
+    def "login as volunteer, and get enrollments"() {
         given: 'a volunteer'
         demoVolunteerLogin()
 
@@ -128,7 +128,7 @@ class GetEnrollmentsWebServiceIT extends SpockTest {
         deleteAll()
     }
 
-    def "login as admin, and get activities"() {
+    def "login as admin, and get enrollments"() {
         given: 'an admin'
         demoAdminLogin()
 
