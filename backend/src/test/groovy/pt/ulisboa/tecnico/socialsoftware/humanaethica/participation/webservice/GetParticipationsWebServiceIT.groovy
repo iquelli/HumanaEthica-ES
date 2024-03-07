@@ -3,12 +3,15 @@ package pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.webservice
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.SpockTest
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.domain.Activity
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.activity.dto.ActivityDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.auth.domain.AuthUser
+import pt.ulisboa.tecnico.socialsoftware.humanaethica.institution.domain.Institution
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.domain.Participation
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.participation.dto.ParticipationDto
 import pt.ulisboa.tecnico.socialsoftware.humanaethica.theme.domain.Theme
@@ -67,7 +70,7 @@ class GetParticipationsWebServiceIT extends SpockTest {
         participationRepository.save(participation)
     }
 
-    def "get participations"() {
+    def "get participations of activity"() {
         given: 'a member'
         demoMemberLogin()
 
@@ -80,7 +83,6 @@ class GetParticipationsWebServiceIT extends SpockTest {
                 .collectList()
                 .block()
 
-        // TODO: also verify volunteer name!
         then: "check response"
         response.size() == 2
         response.get(0).rating == RATING_1
@@ -89,6 +91,73 @@ class GetParticipationsWebServiceIT extends SpockTest {
         response.get(1).rating == RATING_2
         response.get(1).activity.name == ACTIVITY_NAME_1
         response.get(1).volunteer.name == USER_2_NAME
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as member of another institution and get enrollments of activity"() {
+        given: 'another member'
+        def otherInstitution = new Institution(INSTITUTION_1_NAME, INSTITUTION_1_EMAIL, INSTITUTION_1_NIF)
+        institutionRepository.save(otherInstitution)
+        createMember(USER_3_NAME, USER_3_USERNAME, USER_3_PASSWORD, USER_3_EMAIL, AuthUser.Type.NORMAL,
+                otherInstitution, User.State.APPROVED)
+        normalUserLogin(USER_3_USERNAME, USER_3_PASSWORD)
+
+        when:
+        webClient.get()
+                .uri('/participations/' + activity.getId())
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .retrieve()
+                .bodyToFlux(ParticipationDto.class)
+                .collectList()
+                .block()
+
+        then: "check response status"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as volunteer, and get participations of activity"() {
+        given: 'a volunteer'
+        demoVolunteerLogin()
+
+        when:
+        webClient.get()
+                .uri('/participations/' + activity.getId())
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .retrieve()
+                .bodyToFlux(ParticipationDto.class)
+                .collectList()
+                .block()
+
+        then: "check response status"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
+
+        cleanup:
+        deleteAll()
+    }
+
+    def "login as admin, and get participations of activity"() {
+        given: 'an admin'
+        demoAdminLogin()
+
+        when:
+        webClient.get()
+                .uri('/participations/' + activity.getId())
+                .headers(httpHeaders -> httpHeaders.putAll(headers))
+                .retrieve()
+                .bodyToFlux(ParticipationDto.class)
+                .collectList()
+                .block()
+
+        then: "check response status"
+        def error = thrown(WebClientResponseException)
+        error.statusCode == HttpStatus.FORBIDDEN
 
         cleanup:
         deleteAll()
