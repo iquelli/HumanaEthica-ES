@@ -42,7 +42,7 @@ class GetParticipationsServiceTest extends SpockTest {
         def participationDto = new ParticipationDto()
         participationDto.setRating(RATING_1)
 
-        and: "an participation"
+        and: "a participation"
         def participation = new Participation(activity, volunteer1, participationDto)
         participationRepository.save(participation)
 
