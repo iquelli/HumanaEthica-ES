@@ -485,6 +485,20 @@ export default class RemoteServices {
 
   // Assessment Controller
 
+  static async evaluateInstitution(
+    institutionId: number,
+    assessment: Assessment,
+  ) {
+    return httpClient
+      .post(`/institutions/${institutionId}/assessments`, assessment)
+      .then((response) => {
+        return new Assessment(response.data);
+      })
+      .catch(async (error) => {
+        throw Error(await this.errorMessage(error));
+      });
+  }
+
   static async getInstitutionAssessments(
     institutionId: number | null,
   ): Promise<Assessment[]> {
