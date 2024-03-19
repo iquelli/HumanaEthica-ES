@@ -40,8 +40,27 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
+          <v-tooltip v-if="item.state === 'APPROVED'" bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                class="mr-2 action-button"
+                color="blue"
+                v-on="on"
+                @click="writeAssessment(item)"
+                >fas fa-edit</v-icon
+              >
+            </template>
+            <span>Write Assessment</span>
+          </v-tooltip>
         </template>
       </v-data-table>
+      <assessment-dialog
+        v-if="assessmentDialog"
+        v-model="assessmentDialog"
+        :activity="currentActivity"
+        v-on:save-assessment="onSaveAssessment"
+        v-on:close-assessment-dialog="onCloseAssessmentDialog"
+      />
     </v-card>
   </div>
 </template>
@@ -51,13 +70,19 @@ import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import { show } from 'cli-cursor';
+import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
 
 @Component({
+  components: {
+    'assessment-dialog': AssessmentDialog,
+  },
   methods: { show },
 })
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
   search: string = '';
+  currentActivity: Activity | null = null;
+  assessmentDialog: boolean = false;
   headers: object = [
     {
       text: 'Name',
@@ -145,6 +170,22 @@ export default class VolunteerActivitiesView extends Vue {
         await this.$store.dispatch('error', error);
       }
     }
+  }
+
+  writeAssessment(activity: Activity) {
+    this.currentActivity = activity;
+    this.assessmentDialog = true;
+  }
+
+  async onSaveAssessment(activity: Activity) {
+    //TODO and check
+    this.currentActivity = activity;
+    this.assessmentDialog = false;
+  }
+
+  onCloseAssessmentDialog() {
+    this.currentActivity = null;
+    this.assessmentDialog = false;
   }
 }
 </script>
