@@ -14,7 +14,7 @@ describe('Activity', () => {
     const NUMBER = '3';
     const DESCRIPTION = 'Play card games with elderly over 80';
 
-    cy.demoMemberLogin()
+    cy.demoMemberLogin();
     // intercept create activity request and inject date values in the request body
     cy.intercept('POST', '/activities', (req) => {
       req.body = {
@@ -25,7 +25,7 @@ describe('Activity', () => {
     }).as('register');
     // intercept get institutions
     cy.intercept('GET', '/users/*/getInstitution').as('getInstitutions');
-    cy.intercept('GET', '/themes/availableThemes').as('availableTeams')
+    cy.intercept('GET', '/themes/availableThemes').as('availableTeams');
     // go to create activity form
     cy.get('[data-cy="institution"]').click();
 
@@ -47,23 +47,23 @@ describe('Activity', () => {
     cy.get('#endingDateInput-input').click();
     cy.selectDateTimePickerDate();
     // save form
-    cy.get('[data-cy="saveActivity"]').click()
+    cy.get('[data-cy="saveActivity"]').click();
     // check request was done
-    cy.wait('@register')
+    cy.wait('@register');
     // check results
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
       .should('have.length', 1)
       .eq(0)
       .children()
-      .should('have.length', 12)
+      .should('have.length', 13);
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
-      .eq(0).children().eq(0).should('contain', NAME)
+      .eq(0).children().eq(0).should('contain', NAME);
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
-      .eq(0).children().eq(1).should('contain', REGION)
+      .eq(0).children().eq(1).should('contain', REGION);
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
-      .eq(0).children().eq(2).should('contain', NUMBER)
+      .eq(0).children().eq(2).should('contain', NUMBER);
     cy.get('[data-cy="memberActivitiesTable"] tbody tr')
-      .eq(0).children().eq(5).should('contain', DESCRIPTION);
+      .eq(0).children().eq(6).should('contain', DESCRIPTION);
     cy.logout();
 
     cy.demoVolunteerLogin();
@@ -78,13 +78,13 @@ describe('Activity', () => {
       .should('have.length', 1)
       .eq(0)
       .children()
-      .should('have.length', 10)
+      .should('have.length', 10);
     cy.get('[data-cy="volunteerActivitiesTable"] tbody tr')
-      .eq(0).children().eq(0).should('contain', NAME)
+      .eq(0).children().eq(0).should('contain', NAME);
     cy.get('[data-cy="volunteerActivitiesTable"] tbody tr')
-      .eq(0).children().eq(1).should('contain', REGION)
+      .eq(0).children().eq(1).should('contain', REGION);
     cy.get('[data-cy="volunteerActivitiesTable"] tbody tr')
-      .eq(0).children().eq(2).should('contain', NUMBER)
+      .eq(0).children().eq(2).should('contain', NUMBER);
     cy.get('[data-cy="volunteerActivitiesTable"] tbody tr')
       .eq(0).children().eq(4).should('contain', DESCRIPTION);
     cy.logout();
@@ -107,13 +107,13 @@ describe('Activity', () => {
       .should('have.length', 1)
       .eq(0)
       .children()
-      .should('have.length', 14)
+      .should('have.length', 14);
     cy.get('[data-cy="adminActivitiesTable"] tbody tr')
-      .eq(0).children().eq(1).should('contain', NAME)
+      .eq(0).children().eq(1).should('contain', NAME);
     cy.get('[data-cy="adminActivitiesTable"] tbody tr')
-      .eq(0).children().eq(2).should('contain', REGION)
+      .eq(0).children().eq(2).should('contain', REGION);
     cy.get('[data-cy="adminActivitiesTable"] tbody tr')
-      .eq(0).children().eq(3).should('contain', NUMBER)
+      .eq(0).children().eq(3).should('contain', NUMBER);
     cy.get('[data-cy="adminActivitiesTable"] tbody tr')
       .eq(0).children().eq(4).should('contain', DESCRIPTION);
     cy.logout();
