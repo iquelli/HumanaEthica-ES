@@ -508,6 +508,23 @@ export default class RemoteServices {
       });
   }
 
+  // Participation Controller
+
+  static async createParticipation(
+    userId: number,
+    activityId: number,
+    participation: Participation,
+  ) {
+    return httpClient
+      .post(`/activities/${activityId}/participations`, participation)
+      .then((response) => {
+        return new Participation(response.data);
+      })
+      .catch(async (error) => {
+        throw Error(await this.errorMessage(error));
+      });
+  }
+
   // Assessment Controller
 
   static async evaluateInstitution(
@@ -581,8 +598,6 @@ export default class RemoteServices {
         throw Error(await this.errorMessage(error));
       });
   }
-
-  // Theme Controler
 
   static async getThemesAvailable(): Promise<Theme[]> {
     return httpClient
