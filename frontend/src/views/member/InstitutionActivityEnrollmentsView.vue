@@ -28,6 +28,25 @@
           >
         </v-card-title>
       </template>
+      <template v-slot:[`item.action`]="{ item }">
+        <v-tooltip
+          bottom
+          v-if="
+            !item.participating &&
+            activity.numberOfParticipations < activity.participantsNumberLimit
+          "
+        >
+          <template v-slot:activator="{ on }">
+            <v-icon
+              class="mr-2 action-button"
+              @click="selectParticipant(item)"
+              v-on="on"
+              >fa-solid fa-check
+            </v-icon>
+          </template>
+          <span>Select Participant</span>
+        </v-tooltip>
+      </template>
     </v-data-table>
   </v-card>
 </template>
@@ -46,15 +65,34 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
 
   headers: object = [
     {
+      text: 'Name',
+      value: 'volunteerName',
+      align: 'left',
+      width: '10%',
+    },
+    {
       text: 'Motivation',
       value: 'motivation',
       align: 'left',
       width: '50%',
     },
     {
+      text: 'Participating',
+      value: 'participating',
+      align: 'left',
+      width: '10%',
+    },
+    {
       text: 'Application Date',
       value: 'enrollmentDateTime',
       align: 'left',
+      width: '10%',
+    },
+    {
+      text: 'Actions',
+      value: 'action',
+      align: 'left',
+      sortable: false,
       width: '5%',
     },
   ];
@@ -78,6 +116,11 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     await this.$store.dispatch('setActivity', null);
     this.$router.push({ name: 'institution-activities' }).catch(() => {});
   }
+
+  // selectParticipant(participant: Participant) {
+  // this.enrollments = participant;
+  // this.selectParticipantDialog = true;
+  // }
 }
 </script>
 
