@@ -7,6 +7,7 @@ export default class Activity {
   name!: string;
   region!: string;
   participantsNumberLimit!: number;
+  numberOfParticipations!: number;
   numberOfEnrollments!: number;
   themes: Theme[] = [];
   institution!: Institution;
@@ -26,6 +27,7 @@ export default class Activity {
       this.name = jsonObj.name;
       this.region = jsonObj.region;
       this.participantsNumberLimit = jsonObj.participantsNumberLimit;
+      this.numberOfParticipations = jsonObj.numberOfParticipations;
       this.numberOfEnrollments = jsonObj.numberOfEnrollments;
       this.themes = jsonObj.themes.map((themes: Theme) => {
         return new Theme(themes);
