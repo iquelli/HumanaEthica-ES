@@ -53,6 +53,7 @@
                 class="mr-2 action-button"
                 color="blue"
                 v-on="on"
+                data-cy="writeAssessmentButton"
                 @click="writeAssessment(item)"
                 >fas fa-edit</v-icon
               >
