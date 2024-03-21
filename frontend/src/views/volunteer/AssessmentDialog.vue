@@ -8,7 +8,16 @@
         <v-form ref="form" lazy-validation>
           <v-row>
             <v-col cols="12">
-              <v-text-field label="*Review"></v-text-field>
+              <v-text-field
+                label="*Review"
+                :rules="[
+                  (value) =>
+                    !!value || 'Review with at least 10 characters is required',
+                ]"
+                required
+                v-model="assessment.review"
+                data-cy="reviewInput"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-form>
@@ -23,6 +32,7 @@
           Close
         </v-btn>
         <v-btn
+          v-if="isReviewValid()"
           color="blue-darken-1"
           variant="text"
           @click="saveAssessment"
@@ -36,12 +46,20 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Model } from 'vue-property-decorator';
+import Assessment from '@/models/assessment/Assessment';
 
 @Component({})
 export default class AssessmentDialog extends Vue {
   @Model('dialog', Boolean) dialog!: boolean;
 
+  assessment: Assessment = new Assessment();
+
   async created() {}
+
+  isReviewValid() {
+    if (this.assessment.review == null) return false;
+    return this.assessment.review.length >= 10;
+  }
 
   async saveAssessment() {}
 }
