@@ -13,7 +13,7 @@ describe('Assessment', () => {
     const REVIEW = 'review1234';
     const ACTIVITY_NAME = 'A1';
 
-    cy.intercept('POST', new RegExp('/institutions\/\\d+\/assessments')).as('createAssessment');
+    cy.intercept('POST', '/institutions/*/assessments').as('createAssessment');
 
     cy.demoVolunteerLogin();
     cy.intercept('GET', '/activities').as('getActivities');
@@ -28,6 +28,17 @@ describe('Assessment', () => {
     cy.get('[data-cy="reviewInput"]').type(REVIEW);
     cy.get('[data-cy="saveAssessment"]').click();
     cy.wait('@createAssessment');
+    cy.logout();
+
+    cy.demoMemberLogin();
+    cy.intercept('GET', '/users/*/getInstitution').as('getInstitutions');
+    cy.get('[data-cy="institution"]').click();
+    cy.get('[data-cy="assessments"]').click();
+    cy.wait('@getInstitutions');
+    cy.get('[data-cy="institutionAssessmentsTable"] tbody tr')
+      .should('have.length', 1);
+    cy.get('[data-cy="institutionAssessmentsTable"] tbody tr')
+      .eq(0).children().eq(0).should('contain', REVIEW);
     cy.logout();
   });
 });
