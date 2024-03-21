@@ -40,7 +40,14 @@
             </template>
             <span>Report Activity</span>
           </v-tooltip>
-          <v-tooltip v-if="item.state === 'APPROVED'" bottom>
+          <v-tooltip
+            v-if="
+              hasVolunteerParticipatedInActivity(item) &&
+              hasActivityEnded(item) &&
+              !hasVolunteerAssessedInstitution(item)
+            "
+            bottom
+          >
             <template v-slot:activator="{ on }">
               <v-icon
                 class="mr-2 action-button"
@@ -71,6 +78,8 @@ import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import { show } from 'cli-cursor';
 import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
+import Assessment from '@/models/assessment/Assessment';
+import Participation from '@/models/participation/Participation';
 
 @Component({
   components: {
@@ -80,9 +89,13 @@ import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
 })
 export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
+  assessments: Assessment[] = [];
+  participations: Participation[] = [];
   search: string = '';
+
   currentActivity: Activity | null = null;
   assessmentDialog: boolean = false;
+
   headers: object = [
     {
       text: 'Name',
@@ -151,10 +164,32 @@ export default class VolunteerActivitiesView extends Vue {
     await this.$store.dispatch('loading');
     try {
       this.activities = await RemoteServices.getActivities();
+      this.assessments = await RemoteServices.getVolunteerAssessments();
+      this.participations = await RemoteServices.getVolunteerParticipations();
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
     await this.$store.dispatch('clearLoading');
+  }
+
+  hasVolunteerAssessedInstitution(activity: Activity) {
+    return this.assessments.some(
+      (assessment: Assessment) =>
+        assessment.institutionId == activity.institution.id,
+    );
+  }
+
+  hasVolunteerParticipatedInActivity(activity: Activity) {
+    return this.participations.some(
+      (participation: Participation) => participation.activityId == activity.id,
+    );
+  }
+
+  hasActivityEnded(activity: Activity) {
+    const currentDate = new Date();
+    const deadlineDate = new Date(activity.endingDate);
+
+    return currentDate > deadlineDate;
   }
 
   async reportActivity(activity: Activity) {
