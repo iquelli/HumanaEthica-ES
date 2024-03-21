@@ -22,6 +22,14 @@
         >
           Close
         </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="saveAssessment"
+          data-cy="saveAssessment"
+        >
+          Save
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -32,6 +40,10 @@ import { Vue, Component, Model } from 'vue-property-decorator';
 @Component({})
 export default class AssessmentDialog extends Vue {
   @Model('dialog', Boolean) dialog!: boolean;
+
+  async created() {}
+
+  async saveAssessment() {}
 }
 </script>
 
