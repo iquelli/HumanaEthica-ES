@@ -19,6 +19,7 @@ import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMes
 
 @Service
 public class ParticipationService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -38,6 +39,16 @@ public class ParticipationService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<ParticipationDto> getVolunteerParticipations(Integer userId) {
+        if (userId == null) throw new HEException(USER_NOT_FOUND);
+        Volunteer volunteer = (Volunteer) userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
+
+        return participationRepository.getVolunteerParticipations(userId).stream()
+                .map(ParticipationDto::new)
+                .toList();
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ParticipationDto createParticipation(Integer activityId, ParticipationDto participationDto) {
         if (participationDto == null) throw  new HEException(PARTICIPATION_REQUIRES_INFORMATION);
 
@@ -52,4 +63,5 @@ public class ParticipationService {
 
         return new ParticipationDto(participation);
     }
+
 }

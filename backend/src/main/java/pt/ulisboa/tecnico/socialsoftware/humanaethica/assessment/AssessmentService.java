@@ -19,6 +19,7 @@ import static pt.ulisboa.tecnico.socialsoftware.humanaethica.exceptions.ErrorMes
 
 @Service
 public class AssessmentService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -38,6 +39,16 @@ public class AssessmentService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<AssessmentDto> getVolunteerAssessments(Integer userId) {
+        if (userId == null) throw new HEException(USER_NOT_FOUND);
+        Volunteer volunteer = (Volunteer) userRepository.findById(userId).orElseThrow(() -> new HEException(USER_NOT_FOUND, userId));
+
+        return assessmentRepository.getVolunteerAssessments(userId).stream()
+                .map(AssessmentDto::new)
+                .toList();
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public AssessmentDto createAssessment(Integer userId, Integer institutionId, AssessmentDto assessmentDto) {
         if (assessmentDto == null) throw  new HEException(ASSESSMENT_REQUIRES_REVIEW);
 
@@ -52,4 +63,5 @@ public class AssessmentService {
 
         return new AssessmentDto(assessment);
     }
+
 }
