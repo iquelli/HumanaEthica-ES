@@ -48,6 +48,14 @@
         </v-tooltip>
       </template>
     </v-data-table>
+    <participation-dialog
+      v-if="currentEnrollment && selectParticipantDialog"
+      v-model="selectParticipant"
+      :enrollment="currentEnrollment"
+      :activity="activity"
+      v-on:save-participation="onSaveParticipation"
+      v-on:close-participation-dialog="onCloseSelectParticipantDialog"
+    />
   </v-card>
 </template>
 
@@ -56,12 +64,21 @@ import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
+import ParticipationDialog from '@/views/member/ParticipationDialog.vue';
+import Participation from '@/models/participation/Participation';
 
-@Component({})
+@Component({
+  components: {
+    'participation-dialog': ParticipationDialog,
+  },
+})
 export default class InstitutionActivityEnrollmentsView extends Vue {
   activity!: Activity;
   enrollments: Enrollment[] = [];
   search: string = '';
+
+  currentEnrollment: Enrollment | null = null;
+  selectParticipantDialog: boolean = false;
 
   headers: object = [
     {
@@ -117,10 +134,26 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     this.$router.push({ name: 'institution-activities' }).catch(() => {});
   }
 
-  // selectParticipant(participant: Participant) {
-  // this.enrollments = participant;
-  // this.selectParticipantDialog = true;
-  // }
+  selectParticipant(enrollment: Enrollment) {
+    this.currentEnrollment = enrollment;
+    this.selectParticipantDialog = true;
+  }
+
+  onCloseSelectParticipantDialog() {
+    this.currentEnrollment = null;
+    this.selectParticipantDialog = false;
+  }
+
+  async onSaveParticipation(participation: Participation) {
+    // TODO: update enrollments para que enrollment da participation tenha participating = true
+    // this.institution.activities = this.institution.activities.filter(
+    //   (a) => a.id !== activity.id,
+    // );
+    // this.institution.activities.unshift(activity);
+    participation; // TODO remove this (used to avoid unused variable warning)
+    this.selectParticipantDialog = false;
+    this.currentEnrollment = null;
+  }
 }
 </script>
 
