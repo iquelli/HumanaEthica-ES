@@ -45,23 +45,42 @@
   </v-dialog>
 </template>
 <script lang="ts">
-import { Vue, Component, Model } from 'vue-property-decorator';
+import { Vue, Component, Model, Prop } from 'vue-property-decorator';
+import Activity from '@/models/activity/Activity';
 import Assessment from '@/models/assessment/Assessment';
+import RemoteServices from '@/services/RemoteServices';
 
 @Component({})
 export default class AssessmentDialog extends Vue {
   @Model('dialog', Boolean) dialog!: boolean;
+  @Prop({ type: Activity, required: true }) readonly activity!: Activity;
 
   assessment: Assessment = new Assessment();
 
-  async created() {}
+  async created() {
+    this.assessment.institutionId = this.activity.institution.id;
+  }
 
   isReviewValid() {
     if (this.assessment.review == null) return false;
     return this.assessment.review.trim().length >= 10;
   }
 
-  async saveAssessment() {}
+  async saveAssessment() {
+    if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
+      try {
+        if (this.assessment.institutionId != null) {
+          const result = await RemoteServices.evaluateInstitution(
+            this.assessment.institutionId,
+            this.assessment,
+          );
+          this.$emit('save-assessment', result);
+        }
+      } catch (error) {
+        await this.$store.dispatch('error', error);
+      }
+    }
+  }
 }
 </script>
 

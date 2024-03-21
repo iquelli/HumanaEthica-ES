@@ -62,7 +62,7 @@
         </template>
       </v-data-table>
       <assessment-dialog
-        v-if="assessmentDialog"
+        v-if="currentActivity && assessmentDialog"
         v-model="assessmentDialog"
         :activity="currentActivity"
         v-on:save-assessment="onSaveAssessment"
@@ -76,10 +76,10 @@
 import { Component, Vue } from 'vue-property-decorator';
 import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
-import { show } from 'cli-cursor';
-import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
 import Assessment from '@/models/assessment/Assessment';
+import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
 import Participation from '@/models/participation/Participation';
+import { show } from 'cli-cursor';
 
 @Component({
   components: {
@@ -212,7 +212,8 @@ export default class VolunteerActivitiesView extends Vue {
     this.assessmentDialog = true;
   }
 
-  async onSaveAssessment() {
+  async onSaveAssessment(assessment: Assessment) {
+    this.assessments.unshift(assessment);
     this.assessmentDialog = false;
     this.currentActivity = null;
   }
