@@ -177,15 +177,15 @@ export default class VolunteerActivitiesView extends Vue {
     this.assessmentDialog = true;
   }
 
-  async onSaveAssessment(activity: Activity) {
-    //TODO and check
-    this.currentActivity = activity;
+  async onSaveAssessment() {
+    // TODO: create event to store in assessment in the list
     this.assessmentDialog = false;
+    this.currentActivity = null;
   }
 
   onCloseAssessmentDialog() {
-    this.currentActivity = null;
     this.assessmentDialog = false;
+    this.currentActivity = null;
   }
 }
 </script>
