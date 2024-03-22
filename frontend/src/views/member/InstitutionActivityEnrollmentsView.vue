@@ -65,7 +65,6 @@ import RemoteServices from '@/services/RemoteServices';
 import Activity from '@/models/activity/Activity';
 import Enrollment from '@/models/enrollment/Enrollment';
 import ParticipationDialog from '@/views/member/ParticipationDialog.vue';
-import Participation from '@/models/participation/Participation';
 
 @Component({
   components: {
@@ -144,13 +143,10 @@ export default class InstitutionActivityEnrollmentsView extends Vue {
     this.selectParticipantDialog = false;
   }
 
-  async onSaveParticipation(participation: Participation) {
-    // TODO: update enrollments para que enrollment da participation tenha participating = true
-    // this.institution.activities = this.institution.activities.filter(
-    //   (a) => a.id !== activity.id,
-    // );
-    // this.institution.activities.unshift(activity);
-    participation; // TODO remove this (used to avoid unused variable warning)
+  async onSaveParticipation(enrollment: Enrollment) {
+    this.enrollments = this.enrollments.filter((a) => a.id !== enrollment.id);
+    enrollment.participating = true;
+    this.enrollments.unshift(enrollment);
     this.selectParticipantDialog = false;
     this.currentEnrollment = null;
   }
