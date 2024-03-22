@@ -12,7 +12,9 @@
                 label="*Rating"
                 :rules="[
                   (v) =>
-                    isNumberValid(v) || 'Rating between 1 and 5 is required',
+                    !v ||
+                    isNumberValid(v) ||
+                    'Rating between 1 and 5 is required',
                 ]"
                 required
                 v-model="participation.rating"
@@ -43,6 +45,7 @@ import RemoteServices from '@/services/RemoteServices';
 import Participation from '@/models/participation/Participation';
 import Enrollment from '@/models/enrollment/Enrollment';
 import Activity from '@/models/activity/Activity';
+import * as Console from 'console';
 
 @Component({})
 export default class ParticipationDialog extends Vue {
@@ -53,9 +56,11 @@ export default class ParticipationDialog extends Vue {
   participation: Participation = new Participation();
 
   async created() {
-    // TODO: criar participation a partir de enrollment recebido
-    // remover isto?
-    this.participation = new Participation();
+    this.participation.activityId = this.activity.id;
+    // TODO: obter volunteerId a partir de this.enrollment.volunteerName
+    // this.participation.volunteerId =
+    this.participation.volunteerId = 3; // TODO remove (hardcoded)
+    Console.log(this.participation); // TODO remove
   }
 
   isNumberValid(value: any) {
@@ -68,12 +73,12 @@ export default class ParticipationDialog extends Vue {
     if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
       if (this.activity.id !== null) {
         try {
-          const result = await RemoteServices.createParticipation(
+          await RemoteServices.createParticipation(
             this.$store.getters.getUser.id,
             this.activity.id,
             this.participation,
           );
-          this.$emit('save-participation', result);
+          this.$emit('save-participation', this.enrollment);
         } catch (error) {
           await this.$store.dispatch('error', error);
         }
