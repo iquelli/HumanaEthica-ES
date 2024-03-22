@@ -60,6 +60,25 @@
             </template>
             <span>Write Assessment</span>
           </v-tooltip>
+          <v-tooltip
+            v-if="
+              hasApplicationDeadlinePassed(item) &&
+              !hasVolunteerAlreadyEnrolled(item)
+            "
+            bottom
+          >
+            <template v-slot:activator="{ on }">
+              <v-icon
+                class="mr-2 action-button"
+                color="blue"
+                v-on="on"
+                data-cy="applyForActivityButton"
+                @click="applyForActivity(item)"
+                >fas fa-sign-in-alt</v-icon
+              >
+            </template>
+            <span>Apply For Activity</span>
+          </v-tooltip>
         </template>
       </v-data-table>
       <assessment-dialog
@@ -68,6 +87,13 @@
         :activity="currentActivity"
         v-on:save-assessment="onSaveAssessment"
         v-on:close-assessment-dialog="onCloseAssessmentDialog"
+      />
+      <enrollment-dialog
+        v-if="currentActivity && enrollmentDialog"
+        v-model="enrollmentDialog"
+        :activity="currentActivity"
+        v-on:save-enrollment="onSaveEnrollment"
+        v-on:close-enrollment-dialog="onCloseEnrollmentDialog"
       />
     </v-card>
   </div>
@@ -80,11 +106,14 @@ import Activity from '@/models/activity/Activity';
 import Assessment from '@/models/assessment/Assessment';
 import AssessmentDialog from '@/views/volunteer/AssessmentDialog.vue';
 import Participation from '@/models/participation/Participation';
+import EnrollmentDialog from '@/views/volunteer/EnrollmentDialog.vue';
+import Enrollment from '@/models/enrollment/Enrollment';
 import { show } from 'cli-cursor';
 
 @Component({
   components: {
     'assessment-dialog': AssessmentDialog,
+    'enrollment-dialog': EnrollmentDialog,
   },
   methods: { show },
 })
@@ -92,10 +121,12 @@ export default class VolunteerActivitiesView extends Vue {
   activities: Activity[] = [];
   assessments: Assessment[] = [];
   participations: Participation[] = [];
+  enrollments: Enrollment[] = [];
   search: string = '';
 
   currentActivity: Activity | null = null;
   assessmentDialog: boolean = false;
+  enrollmentDialog: boolean = false;
 
   headers: object = [
     {
@@ -167,6 +198,7 @@ export default class VolunteerActivitiesView extends Vue {
       this.activities = await RemoteServices.getActivities();
       this.assessments = await RemoteServices.getVolunteerAssessments();
       this.participations = await RemoteServices.getVolunteerParticipations();
+      this.enrollments = await RemoteServices.getVolunteerEnrollments();
     } catch (error) {
       await this.$store.dispatch('error', error);
     }
@@ -193,6 +225,19 @@ export default class VolunteerActivitiesView extends Vue {
     return currentDate > deadlineDate;
   }
 
+  hasApplicationDeadlinePassed(activity: Activity) {
+    const currentDate = new Date();
+    const deadlineDate = new Date(activity.applicationDeadline);
+
+    return deadlineDate > currentDate;
+  }
+
+  hasVolunteerAlreadyEnrolled(activity: Activity) {
+    return this.enrollments.some(
+      (enrollment: Enrollment) => enrollment.activity.id == activity.id,
+    );
+  }
+
   async reportActivity(activity: Activity) {
     if (activity.id !== null) {
       try {
@@ -213,14 +258,30 @@ export default class VolunteerActivitiesView extends Vue {
     this.assessmentDialog = true;
   }
 
+  applyForActivity(activity: Activity) {
+    this.currentActivity = activity;
+    this.enrollmentDialog = true;
+  }
+
   async onSaveAssessment(assessment: Assessment) {
     this.assessments.unshift(assessment);
     this.assessmentDialog = false;
     this.currentActivity = null;
   }
 
+  async onSaveEnrollment(enrollment: Enrollment) {
+    this.enrollments.unshift(enrollment);
+    this.enrollmentDialog = false;
+    this.currentActivity = null;
+  }
+
   onCloseAssessmentDialog() {
     this.assessmentDialog = false;
+    this.currentActivity = null;
+  }
+
+  onCloseEnrollmentDialog() {
+    this.enrollmentDialog = false;
     this.currentActivity = null;
   }
 }
