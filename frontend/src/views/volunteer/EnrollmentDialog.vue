@@ -24,6 +24,7 @@
           Close
         </v-btn>
         <v-btn
+          v-if="isMotivationValid()"
           color="blue-darken-1"
           variant="text"
           data-cy="saveEnrollment"
@@ -51,6 +52,13 @@ export default class EnrollmentDialog extends Vue {
   async created() {
     this.enrollment = new Enrollment();
     this.enrollment.activity = this.activity;
+  }
+
+  isMotivationValid() {
+    if (this.enrollment.motivation == null) {
+      return false;
+    }
+    return this.enrollment.motivation.trim().length >= 10;
   }
 
   async saveEnrollment() {
