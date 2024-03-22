@@ -8,8 +8,13 @@
         <v-form ref="form" lazy-validation>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="enrollment.motivation" label="*Motivation">
-              </v-text-field>
+              <v-text-field
+                label="*Motivation"
+                :rules="[(v) => !!v || 'Motivation is required']"
+                required
+                v-model="enrollment.motivation"
+                data-cy="motivationInput"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-form>
