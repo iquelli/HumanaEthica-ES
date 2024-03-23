@@ -62,7 +62,7 @@ export default class ParticipationDialog extends Vue {
 
   async created() {
     this.participation.activityId = this.activity.id;
-    this.participation.volunteerId = this.enrollment.volunteerId;
+    this.participation.volunteerId = this.enrollment.volunteer.id;
   }
 
   isNumberValid(value: any) {
