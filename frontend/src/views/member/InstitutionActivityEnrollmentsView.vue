@@ -41,6 +41,7 @@
               class="mr-2 action-button"
               @click="selectParticipant(item)"
               v-on="on"
+              data-cy="selectParticipant"
               >fa-solid fa-check
             </v-icon>
           </template>

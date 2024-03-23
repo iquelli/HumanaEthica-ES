@@ -9,9 +9,9 @@ const credentials = {
 const INSTITUTION_COLUMNS = "institutions (id, active, confirmation_token, creation_date, email, name, nif, token_generation_date)";
 const USER_COLUMNS = "users (user_type, id, creation_date, name, role, state, institution_id)";
 const AUTH_USERS_COLUMNS = "auth_users (auth_type, id, active, email, username, user_id)";
-const ACTIVITY_COLUMNS = "activities (id, application_deadline, creation_date, description, ending_date, name, participants_number_limit, region, starting_date, state, institution_id)"
-const ENROLLMENT_COLUMNS = "enrollments (id, enrollment_date_time, motivation, activity_id, volunteer_id)"
-const PARTICIPATION_COLUMNS = "participations (id, acceptance_date, rating, activity_id, volunteer_id)"
+const ACTIVITY_COLUMNS = "activity (id, application_deadline, creation_date, description, ending_date, name, participants_number_limit, region, starting_date, state, institution_id)"
+const ENROLLMENT_COLUMNS = "enrollment (id, enrollment_date_time, motivation, activity_id, volunteer_id)"
+const PARTICIPATION_COLUMNS = "participation (id, acceptance_date, rating, activity_id, volunteer_id)"
 
 
 const now = new Date();
@@ -25,6 +25,18 @@ const dayBeforeYesterday = new Date(now);
 dayBeforeYesterday.setDate(now.getDate() - 2);
 
 Cypress.Commands.add('deleteAllButArs', () => {
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ENROLLMENT",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM PARTICIPATION",
+    credentials: credentials,
+  });
+  cy.task('queryDatabase', {
+    query: "DELETE FROM ASSESSMENT",
+    credentials: credentials,
+  })
   cy.task('queryDatabase', {
     query: "DELETE FROM ACTIVITY",
     credentials: credentials,
@@ -66,7 +78,7 @@ Cypress.Commands.add('createDemoEntities', () => {
   })
 });
 
-Cypress.Commands.add('createDemoEntitiesForSelectParticipant', () => {
+Cypress.Commands.add('createDataForParticipations', () => {
   cy.task('queryDatabase',  {
     query: "INSERT INTO " + INSTITUTION_COLUMNS + generateInstitutionTuple(1),
     credentials: credentials,
@@ -76,7 +88,7 @@ Cypress.Commands.add('createDemoEntitiesForSelectParticipant', () => {
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
-    query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(2, "DEMO", "demo-member", 2),
+    query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(2, "DEMO", "demo_member@mail.com", "demo-member", 2),
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
@@ -97,10 +109,6 @@ Cypress.Commands.add('createDemoEntitiesForSelectParticipant', () => {
   })
   cy.task('queryDatabase',  {
     query: "INSERT INTO " + USER_COLUMNS + generateUserTuple(5, "VOLUNTEER","DEMO-VOLUNTEER3", "VOLUNTEER", "NULL"),
-    credentials: credentials,
-  })
-  cy.task('queryDatabase',  {
-    query: "INSERT INTO " + AUTH_USERS_COLUMNS + generateAuthUserTuple(5, "DEMO", "demo_volunteer@mail.com","demo-volunteer-3", 5),
     credentials: credentials,
   })
   cy.task('queryDatabase',  {
