@@ -18,6 +18,7 @@
                 ]"
                 required
                 v-model="participation.rating"
+                data-cy="ratingInput"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -32,7 +33,12 @@
         >
           Close
         </v-btn>
-        <v-btn color="blue-darken-1" variant="text" @click="makeParticipant">
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="makeParticipant"
+          data-cy="makeParticipantButton"
+        >
           Make Participant
         </v-btn>
       </v-card-actions>
@@ -45,7 +51,6 @@ import RemoteServices from '@/services/RemoteServices';
 import Participation from '@/models/participation/Participation';
 import Enrollment from '@/models/enrollment/Enrollment';
 import Activity from '@/models/activity/Activity';
-import * as Console from 'console';
 
 @Component({})
 export default class ParticipationDialog extends Vue {
