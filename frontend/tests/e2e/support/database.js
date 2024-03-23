@@ -145,6 +145,29 @@ Cypress.Commands.add('createDataForAssessmentsTest', () => {
 
 });
 
+Cypress.Commands.add('createDataForEnrollmentsTest', () => {
+
+  // Activities
+  cy.task("queryDatabase", {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(1, "2024-08-06 17:58:21.402146", "2024-08-06 17:58:21.402146", "Enrollment is open", "2024-08-08 17:58:21.402146", "A1", 1, "Lisbon", "2024-08-07 17:58:21.402146", "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task("queryDatabase", {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(2, "2024-08-06 17:58:21.402146", "2024-08-06 17:58:21.402146", "Enrollment is open and it is already enrolled", "2024-08-08 17:58:21.402146", "A2", 2, "Lisbon", "2024-08-07 17:58:21.402146", "APPROVED", 1),
+    credentials: credentials,
+  })
+  cy.task("queryDatabase", {
+    query: "INSERT INTO " + ACTIVITY_COLUMNS + generateActivityTuple(3, "2024-02-06 17:58:21.402146", "2024-08-06 17:58:21.402146", "Enrollment is closed", "2024-08-08 17:58:21.402146", "A3", 3, "Lisbon", "2024-08-07 17:58:21.402146", "APPROVED", 1),
+    credentials: credentials,
+  })
+
+  // Enrollments
+  cy.task("queryDatabase", {
+    query: "INSERT INTO " + ENROLLMENT_COLUMNS + generateEnrollmentTuple(5, "2024-02-06 18:51:37.595713", "Inserted motivation", 2, 3),
+    credentials: credentials
+  })
+
+});
 
 function generateAuthUserTuple(id, authType, username, userId) {
   return "VALUES ('"
