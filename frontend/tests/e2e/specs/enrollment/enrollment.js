@@ -10,13 +10,26 @@ describe('Enrollment', () => {
     });
 
     it('create enrollment', () => {
+        const INITIAL_APPLICATIONS = "0";
         const MOTIVATION = 'motivation';
+        const FINAL_APPLICATIONS = "1";
 
-        cy.intercept('POST', '/activities/*/enrollments').as('createEnrollment');
+        cy.intercept('GET', '/users/*/getInstitution').as('getInstitutions');
 
-        //Tiago part
+        cy.demoMemberLogin();
+        cy.get('[data-cy="institution"]').click();
+        cy.get('[data-cy="activities"]').click();
+        cy.wait('@getInstitutions');
+        cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+            .should('have.length', 3)
+            .eq(0)
+            .children()
+            .eq(3)
+            .should('contain', INITIAL_APPLICATIONS);
+        cy.logout();
 
         cy.demoVolunteerLogin();
+        cy.intercept('POST', '/activities/*/enrollments').as('createEnrollment');
         cy.intercept('GET', '/activities').as('getActivities');
         cy.get('[data-cy="volunteerActivities"]').click();
         cy.wait('@getActivities');
@@ -27,7 +40,27 @@ describe('Enrollment', () => {
         cy.wait('@createEnrollment');
         cy.logout();
 
-        //Tiago part
-
+        cy.demoMemberLogin();
+        cy.intercept('GET', '/activities/*/enrollments').as('getEnrollments');
+        cy.get('[data-cy="institution"]').click();
+        cy.get('[data-cy="activities"]').click();
+        cy.wait('@getInstitutions');
+        cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+            .eq(0)
+            .children()
+            .eq(3)
+            .should('contain', FINAL_APPLICATIONS);
+        cy.get('[data-cy="memberActivitiesTable"] tbody tr')
+            .get('[data-cy="showEnrollments"]')
+            .eq(0)
+            .click();
+        cy.wait('@getEnrollments');
+        cy.get('[data-cy="activityEnrollmentsTable"] tbody tr')
+            .should('have.length', 1)
+            .eq(0)
+            .children()
+            .eq(0)
+            .should('contain', MOTIVATION);
+        cy.logout();
     });
 });
