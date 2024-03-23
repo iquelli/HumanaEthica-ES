@@ -51,7 +51,7 @@
     </v-data-table>
     <participation-dialog
       v-if="currentEnrollment && selectParticipantDialog"
-      v-model="selectParticipant"
+      v-model="selectParticipantDialog"
       :enrollment="currentEnrollment"
       :activity="activity"
       v-on:save-participation="onSaveParticipation"
