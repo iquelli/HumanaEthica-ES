@@ -12,7 +12,7 @@ public class ActivityDto {
     private String name;
     private String region;
     private Integer participantsNumberLimit;
-	private Integer numberOfEnrollments;
+    private Integer numberOfEnrollments;
     private String description;
     private String startingDate;
     private String endingDate;
@@ -30,7 +30,7 @@ public class ActivityDto {
         setName(activity.getName());
         setRegion(activity.getRegion());
         setParticipantsNumberLimit(activity.getParticipantsNumberLimit());
-		setNumberOfEnrollments(activity.getEnrollments().size());
+        setNumberOfEnrollments(activity.getEnrollments().size());
         setDescription(activity.getDescription());
 
         this.themes = activity.getThemes().stream()
