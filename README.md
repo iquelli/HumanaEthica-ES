@@ -8,6 +8,12 @@
   <a href="#license">License</a>
 </p>
 
+**⚠️⚠️⚠️ WARNING:** This is a snapshot of the real repository, which is private on GitLab.
+
+Screenshots of issues and merge requests are available in [ISSUE_BOARDS.png](ISSUE_BOARDS.png) and [MERGE_REQUESTS.png](MERGE_REQUESTS.png) respectively.
+
+Project sub-groups can be seen in the [P1.md](markdown/P1.md) and [P2.md](markdown/P2.md) files.
+
 # About
 
 **HumanaEthica** is an open-source broker that aims to connect charities and non-profit organizations with volunteers.
